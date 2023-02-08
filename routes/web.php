@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\ProdukController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,13 +23,9 @@ Route::get('/upload', function () {
     return view('pages.upload');
 });
 
-Route::get('/produk', function () {
-    return view('pages.dm_produk');
-});
+Route::get('/produk', [ProdukController::class, 'index']);
 
-Route::get('/kategori', function () {
-    return view('pages.dm_kategori');
-});
+Route::get('/kategori', [KategoriController::class, 'index']);
 
 Route::get('/sembako', function () {
     return view('pages.dt_sembako');
