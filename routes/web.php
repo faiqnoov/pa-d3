@@ -24,6 +24,7 @@ Route::get('/upload', function () {
 });
 
 Route::get('/produk', [ProdukController::class, 'index']);
+Route::post('/produk/sembako', [ProdukController::class, 'importMstSembako']);
 
 Route::get('/kategori', [KategoriController::class, 'index']);
 
