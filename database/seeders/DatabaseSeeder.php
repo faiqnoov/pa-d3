@@ -18,7 +18,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Kategori::create([
-            'nama' => 'Testing',
+            'nama' => 'Sembako',
+        ]);
+        
+        Kategori::create([
+            'nama' => 'Bahan Masakan',
         ]);
 
         Produk::create([

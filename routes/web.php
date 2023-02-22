@@ -25,6 +25,7 @@ Route::get('/upload', function () {
 
 Route::get('/produk', [ProdukController::class, 'index']);
 Route::post('/produk/sembako', [ProdukController::class, 'importMstSembako']);
+Route::post('/produk/prdkantin', [ProdukController::class, 'importMstPrdKantin']);
 
 Route::get('/kategori', [KategoriController::class, 'index']);
 

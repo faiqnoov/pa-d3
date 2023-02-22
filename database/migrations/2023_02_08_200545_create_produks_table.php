@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('id_kategori');
             $table->string('nama');
             $table->string('keterangan')->nullable();
-            $table->string('satuan');
+            $table->string('satuan')->nullable();
             $table->string('merek')->nullable();
             $table->integer('harga_jual')->nullable();
             $table->integer('harga_beli')->nullable();

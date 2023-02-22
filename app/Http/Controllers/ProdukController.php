@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\MstPrdKantinImport;
 use App\Imports\MstSembakoImport;
 use App\Models\Produk;
 use Illuminate\Http\Request;
@@ -24,5 +25,14 @@ class ProdukController extends Controller
         Excel::import(new MstSembakoImport, $file);
         
         return redirect('/produk')->with('success', 'Data produk berhasil diperbarui!');
+    }
+
+    public function importMstPrdKantin(Request $request) 
+    {
+        $file = $request->file('prd_kantin');
+
+        Excel::import(new MstPrdKantinImport, $file);
+        
+        return redirect('/')->with('success', 'Data produk berhasil diperbarui!');
     }
 }
