@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProdukController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,3 +41,7 @@ Route::get('/sembako/data', function () {
 Route::get('/sembako/data/preview', function () {
     return view('pages.dt_sembako_data_prev');
 });
+
+Route::get('penjualan/kantin', [PenjualanController::class, 'index']);
+Route::get('penjualan/kantin/data', [PenjualanController::class, 'manageData']);
+Route::post('penjualan/kantin/data', [PenjualanController::class, 'importJualKantin']);

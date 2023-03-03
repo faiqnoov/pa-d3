@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Kategori;
+use App\Models\Penjualan;
 use App\Models\Produk;
 use Illuminate\Database\Seeder;
 
@@ -32,6 +33,13 @@ class DatabaseSeeder extends Seeder
             'satuan' => 'kg',
             'merek' => 'Gulaque',
             'harga_beli' => 12000,
+        ]);
+
+        Penjualan::create([
+            'id_produk' => 1,
+            'tanggal' => '2023-02-28',
+            'jumlah' => 7,
+            'penjualan_kotor' => 49000
         ]);
     }
 }
