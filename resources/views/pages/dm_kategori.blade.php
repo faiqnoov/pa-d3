@@ -29,7 +29,7 @@
       <tbody>
         @foreach ($kategoris as $kategori)
           <tr class="border-t bg-white dark:border-gray-700 dark:bg-gray-800">
-            <th scope="row" class="whitespace-nowrap px-6 py-4">{{ $loop->iteration }}</th>
+            <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium">{{ $loop->iteration }}</th>
             <td class="px-6 py-4">{{ $kategori->nama }}</td>
             <td class="px-6 py-4">Edit</td>
           </tr>

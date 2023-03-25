@@ -3,14 +3,12 @@
 @section('content')
   <div class="flex items-center justify-between mb-5">
     <h1 class="text-xl md:text-3xl text-gray-900 dark:text-white">Data Transaksi Belanja Sembako</h1>
-    {{-- <a href="/upload" class="cursor-pointer rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700">Import Data Baru</a> --}}
-    <!-- Modal toggle -->
     <button data-modal-target="importdata-modal" data-modal-toggle="importdata-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
       Import Data Baru
     </button>
   </div>
 
-  <div class="flex gap-4 text-gray-700 dark:text-gray-400">
+  <div class="flex gap-4 text-gray-700 dark:text-gray-100">
     <div class="w-64 rounded-lg bg-white py-3 px-4 dark:bg-gray-800">
       <p>Jumlah Transaksi</p>
       <p class="text-xl md:text-2xl font-medium">1.208</p>
@@ -22,8 +20,8 @@
   </div>
 
   <div class="relative overflow-x-auto  rounded-lg mt-5">
-    <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400" id="product_table">
-      <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+    <table class="w-full text-left text-sm text-gray-700 dark:text-gray-100">
+      <thead class="bg-gray-50 text-xs uppercase dark:bg-gray-700">
         <tr>
           <th scope="col" class="px-6 py-3">No</th>
           <th scope="col" class="px-6 py-3">Tanggal</th>
@@ -37,7 +35,7 @@
       </thead>
       <tbody>
         <tr class="border-t bg-white dark:border-gray-700 dark:bg-gray-800">
-          <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">1</th>
+          <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium">1</th>
           <td class="px-6 py-4">2023-01-20</td>
           <td class="px-6 py-4">Beras Merah</td>
           <td class="px-6 py-4">10</td>

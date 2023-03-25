@@ -5,15 +5,20 @@ namespace App\Http\Controllers;
 use App\Imports\TrxJualKantinImport;
 use App\Models\Penjualan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PenjualanController extends Controller
 {
     public function index()
     {
-        return view('pages.dt_prdkantin', [
-            'penjualans' => Penjualan::paginate(30)
-        ]);
+        // $data = Penjualan::groupBy('tanggal')->get();
+        // $data = DB::table('Penjualans')->select(DB::raw(COUNT('id_produk')))
+        //         ->groupBy('tanggal')
+        //         ->get();
+        // dd($data);
+
+        return view('pages.dt_prdkantin');
     }
 
     public function manageData()
