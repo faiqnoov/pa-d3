@@ -2,8 +2,8 @@
 
 namespace App\Imports;
 
-use App\Models\Kategori;
 use App\Models\Produk;
+use App\Models\Subkategori;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
@@ -16,10 +16,11 @@ class MstPrdKantinImport implements ToModel, WithHeadingRow
     */
     public function model(array $row)
     {
-        $isCategoryExist = Kategori::where('nama', $row['kategori'])->exists();
+        $isSubcategoryExist = Subkategori::where('nama', $row['kategori'])->exists();
 
-        if(!$isCategoryExist) {
-            return new Kategori([
+        if(!$isSubcategoryExist) {
+            return new Subkategori([
+                'id_kategori' => 1,
                 'nama' => $row['kategori'],
             ]);
         }
@@ -27,9 +28,9 @@ class MstPrdKantinImport implements ToModel, WithHeadingRow
         $isProductExist = Produk::where('nama', $row['nama_produk'])->exists();
         
         if(!$isProductExist) {
-            $matchCategoryId = Kategori::where('nama', $row['kategori'])->get('id');
+            $matchSubcategoryId = Subkategori::where('nama', $row['kategori'])->get('id');
             return new Produk([
-                'id_kategori' => $matchCategoryId[0]->id,
+                'id_subkategori' => $matchSubcategoryId[0]->id,
                 'nama' => $row['nama_produk'],
                 'merek' => $row['merek'],
                 'harga_jual' => $row['harga_jual'],

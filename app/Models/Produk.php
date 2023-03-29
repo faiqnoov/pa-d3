@@ -11,9 +11,9 @@ class Produk extends Model
     
     protected $guarded = ['id'];
     
-    public function kategori()
+    public function subkategori()
     {
-        return $this->belongsTo(Kategori::class, 'id_kategori');
+        return $this->belongsTo(Subkategori::class, 'id_subkategori');
     }
 
     public function penjualans()

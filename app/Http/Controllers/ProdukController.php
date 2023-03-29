@@ -33,6 +33,6 @@ class ProdukController extends Controller
 
         Excel::import(new MstPrdKantinImport, $file);
         
-        return redirect('/')->with('success', 'Data produk berhasil diperbarui!');
+        return redirect('/produk')->with('success', 'Data produk berhasil diperbarui!');
     }
 }

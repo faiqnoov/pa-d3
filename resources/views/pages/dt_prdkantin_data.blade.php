@@ -25,7 +25,7 @@
         <tr>
           <th scope="col" class="px-6 py-3">No</th>
           <th scope="col" class="px-6 py-3">Tanggal</th>
-          <th scope="col" class="px-6 py-3">Kategori</th>
+          <th scope="col" class="px-6 py-3">Subkategori</th>
           <th scope="col" class="px-6 py-3">Nama Produk</th>
           <th scope="col" class="px-6 py-3">Jumlah Terjual</th>
           <th scope="col" class="px-6 py-3">Penjualan Kotor</th>
@@ -37,7 +37,7 @@
           <tr class="border-t bg-white dark:border-gray-700 dark:bg-gray-800">
             <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium">{{ $loop->iteration }}</th>
             <td class="px-6 py-4">{{ $penjualan->tanggal }}</td>
-            <td class="px-6 py-4">{{ $penjualan->produk->kategori->nama }}</td>
+            <td class="px-6 py-4">{{ $penjualan->produk->subkategori->nama }}</td>
             <td class="px-6 py-4">{{ $penjualan->produk->nama }}</td>
             <td class="px-6 py-4">{{ $penjualan->jumlah }}</td>
             <td class="px-6 py-4">{{ number_format($penjualan->penjualan_kotor) }}</td>

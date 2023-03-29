@@ -8,8 +8,8 @@
 
   <div class="flex gap-4 text-gray-700 dark:text-gray-100">
     <div class="w-64 rounded-lg bg-white py-3 px-4 dark:bg-gray-800">
-      <p>Jumlah Kategori</p>
-      <p class="text-xl md:text-2xl font-medium">{{ $jmlKategori }}</p>
+      <p>Jumlah Subkategori</p>
+      <p class="text-xl md:text-2xl font-medium">{{ $jmlSubkategori }}</p>
     </div>
     <div class="w-64 rounded-lg bg-white py-3 px-4 dark:bg-gray-800">
       <p>Terakhir Diperbarui</p>
@@ -22,15 +22,17 @@
       <thead class="bg-gray-50 text-xs uppercase dark:bg-gray-700">
         <tr>
           <th scope="col" class="px-6 py-3">No</th>
-          <th scope="col" class="px-6 py-3">Nama Kategori</th>
+          <th scope="col" class="px-6 py-3">Kategori</th>
+          <th scope="col" class="px-6 py-3">Subkategori</th>
           <th scope="col" class="px-6 py-3">Aksi</th>
         </tr>
       </thead>
       <tbody>
-        @foreach ($kategoris as $kategori)
+        @foreach ($subkategoris as $subkategori)
           <tr class="border-t bg-white dark:border-gray-700 dark:bg-gray-800">
             <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium">{{ $loop->iteration }}</th>
-            <td class="px-6 py-4">{{ $kategori->nama }}</td>
+            <td class="px-6 py-4">{{ $subkategori->kategori->nama }}</td>
+            <td class="px-6 py-4">{{ $subkategori->nama }}</td>
             <td class="px-6 py-4">Edit</td>
           </tr>
         @endforeach

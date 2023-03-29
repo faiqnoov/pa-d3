@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Kategori;
 use App\Models\Penjualan;
 use App\Models\Produk;
+use App\Models\Subkategori;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -19,15 +20,25 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Kategori::create([
+            'nama' => 'Makanan',
+        ]);
+
+        Kategori::create([
+            'nama' => 'Minuman',
+        ]);
+        
+        Subkategori::create([
+            'id_kategori' => 1,
             'nama' => 'Sembako',
         ]);
         
-        Kategori::create([
+        Subkategori::create([
+            'id_kategori' => 1,
             'nama' => 'Bahan Masakan',
         ]);
 
         Produk::create([
-            'id_kategori' => 1,
+            'id_subkategori' => 1,
             'nama' => 'Sugar',
             'keterangan' => 'Satuan',
             'satuan' => 'kg',

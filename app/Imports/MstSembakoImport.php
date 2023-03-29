@@ -17,7 +17,7 @@ class MstSembakoImport implements ToModel, WithHeadingRow, WithMultipleSheets
     public function model(array $row)
     {
         return new Produk([
-            'id_kategori' => 1,
+            'id_subkategori' => 1,
             'nama' => $row['nama_barang'],
             'keterangan' => $row['keterangan'],
             'satuan' => $row['satuan'],

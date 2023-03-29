@@ -36,7 +36,7 @@
       <thead class="bg-gray-50 text-xs uppercase dark:bg-gray-700">
         <tr>
           <th scope="col" class="px-6 py-3">No</th>
-          <th scope="col" class="px-6 py-3">Kategori</th>
+          <th scope="col" class="px-6 py-3">Subkategori</th>
           <th scope="col" class="px-6 py-3">Nama Barang</th>
           <th scope="col" class="px-6 py-3">Keterangan</th>
           <th scope="col" class="px-6 py-3">Satuan</th>
@@ -50,7 +50,7 @@
         @foreach ($produks as $produk)
           <tr class="border-t bg-white dark:border-gray-700 dark:bg-gray-800">
             <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium">{{ $loop->iteration }}</th>
-            <td class="px-6 py-4">{{ $produk->kategori->nama }}</td>
+            <td class="px-6 py-4">{{ $produk->subkategori->nama }}</td>
             <td class="px-6 py-4">{{ $produk->nama }}</td>
             <td class="px-6 py-4">{{ $produk->keterangan }}</td>
             <td class="px-6 py-4">{{ $produk->satuan }}</td>
