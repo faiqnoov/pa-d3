@@ -7,32 +7,52 @@
   </div>
 
   <span class="inline-block bg-blue-100 text-blue-800 font-medium mb-3 px-2.5 py-1 rounded-full dark:bg-blue-900 dark:text-blue-300">Grafik Ringkasan</span>
+  {{-- <table class="text-white">
+    <tr>
+      <th>tgl</th>
+      <th>total penjualan</th>
+    </tr>
+    @foreach ($totals as $total)
+      <tr>
+        <td class="px-3 py-1">{{ $total->tanggal }}</td>
+        <td class="px-3 py-1">{{ $total->total_penjualan }}</td>
+      </tr>
+    @endforeach
+  </table> --}}
   <div class="flex gap-4">
     <div class="basis-2/3 h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
-      <p class="font-semibold text-gray-800 dark:text-gray-200">Nominal Penjualan Kantin 1 Oktober 2022 - 15 November 2022</p>
+      <p class="font-semibold text-gray-800 dark:text-gray-200">Nominal Penjualan Kantin 6 Bulan Terakhir</p>
       <canvas id="resumeChart"></canvas>
     </div>
     <div class="basis-1/3 h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
-      <p class="font-semibold text-center text-gray-800 dark:text-gray-200">5 Barang dengan Jumlah Penjualan Terbanyak</p>
-      <canvas id="sortedChart"></canvas>
+      <p class="font-semibold text-center text-gray-800 dark:text-gray-200">5 Produk dengan Jumlah Penjualan Terbanyak</p>
+      <canvas id="rankedChart"></canvas>
     </div>
   </div>
 
   <span class="inline-block bg-blue-100 text-blue-800 font-medium mt-4 mb-3 px-2.5 py-1 rounded-full dark:bg-blue-900 dark:text-blue-300">Grafik Berdasarkan Filter</span>
   <div class="flex gap-4">
     <div class="basis-2/3 h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
-      <p class="font-semibold text-gray-800 dark:text-gray-200">Jumlah Penjualan Air Mineral 1 Oktober 2022 - 15 November 2022</p>
+      {{-- @dd($barangTrens) --}}
+      <p class="font-semibold text-gray-800 dark:text-gray-200">Jumlah Penjualan xxx 1 Oktober 2022 - 15 November 2022</p>
       <canvas id="filteredChart"></canvas>
     </div>
     <div class="basis-1/3 h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
       <p class="font-semibold text-center text-gray-800 dark:text-gray-200">Filter Data</p>
       <div>
         <div>
-          <label for="barang" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pilih Barang</label>
-          <select id="barang" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+          <label for="barang1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pilih Barang 1</label>
+          <select id="barang1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+            <option>-</option>
             <option>Air Mineral</option>
             <option>Nasi</option>
             <option>Sayur</option>
+          </select>
+        </div>
+        <div>
+          <label for="barang2" class="block mt-3 mb-2 text-sm font-medium text-gray-900 dark:text-white">Pilih Barang 2</label>
+          <select id="barang2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+            <option>-</option>
           </select>
         </div>
         <div>
@@ -59,21 +79,26 @@
 @section('js')
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
+  
   <script>
-    const ctx = document.getElementById('resumeChart');
+    let totals = @json($totals);
+    let labels1 = Object.keys(totals);
+    let data1 = Object.values(totals);
+
+    const crt1 = document.getElementById('resumeChart');
 
     // const data = [
     //   {date: 2022-11-30, totalNominal: 120000000}
     // ];
     // how to get total nominal amount from every single date?
 
-    new Chart(ctx, {
+    new Chart(crt1, {
       type: 'line',
       data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun'],
+        labels: labels1,
         datasets: [{
           label: 'Nominal Penjualan',
-          data: [120000000, 110000000, 98000000, 117000000, 105000000, 127000000],
+          data: data1,
           borderWidth: 1
         }]
       },
@@ -86,15 +111,24 @@
       }
     });
 
-    const crt2 = document.getElementById('sortedChart');
+
+    let ranks = @json($ranks);
+    let labels2 = Object.keys(ranks);
+    let data2 = Object.values(ranks);
+
+    // console.log(ranks);
+    // console.log(labels2);
+    // console.log(data2);
+
+    const crt2 = document.getElementById('rankedChart');
 
     new Chart(crt2, {
       type: 'bar',
       data: {
-        labels: ['Air Mineral', 'Nasi', 'Ayam', 'Sayur', 'Mie'],
+        labels: labels2,
         datasets: [{
           label: 'Item Terjual',
-          data: [1200, 998, 800, 729, 602],
+          data: data2,
           borderWidth: 1
         }]
       },
@@ -107,15 +141,19 @@
       }
     });
 
+    let trens = @json($trens);
+    let labels3 = Object.keys(trens);
+    let data3 = Object.values(trens);
+
     const crt3 = document.getElementById('filteredChart');
 
     new Chart(crt3, {
       type: 'line',
       data: {
-        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei'],
+        labels: labels3,
         datasets: [{
           label: 'Jumlah Item Terjual',
-          data: [3619, 3000, 3200, 2900, 3300],
+          data: data3,
           borderWidth: 1
         }]
       },

@@ -12,13 +12,50 @@ class PenjualanController extends Controller
 {
     public function index()
     {
-        // $data = Penjualan::groupBy('tanggal')->get();
-        // $data = DB::table('Penjualans')->select(DB::raw(COUNT('id_produk')))
-        //         ->groupBy('tanggal')
-        //         ->get();
-        // dd($data);
+        // $cireng = Penjualan::all();
+        // $cireng = DB::table('Penjualans')->get();
+        // $cireng = ['2023-11-30' => 123000000, '2023-12-31' => 99000];
 
-        return view('pages.dt_prdkantin');
+        // -- chart ringkasan
+        $getDataRingkasan = DB::table('penjualans')->select(DB::raw('SUM(penjualan_kotor) as total_penjualan, tanggal'))
+                    ->groupBy('tanggal')
+                    ->orderBy('tanggal')
+                    ->limit(6)
+                    ->get();
+
+        $dataRingkasan = $getDataRingkasan->mapWithKeys(function ($item, $key) {
+            return [$item->tanggal => $item->total_penjualan];
+        });
+
+        // -- chart ranking
+        // pake join buat ambil nama produk(?)
+        $getDataRank = DB::table('penjualans')->select(DB::raw('id_produk, jumlah'))
+                    ->orderBy('jumlah', 'desc')
+                    ->limit(5)
+                    ->get();
+
+        $dataRank = $getDataRank->mapWithKeys(function ($item, $key) {
+            return [$item->id_produk => $item->jumlah];
+        });
+
+        // -- chart filter
+        $idProdukFilter = 90;
+        $getDataFiltered = DB::table('penjualans')->select(DB::raw('jumlah, tanggal'))
+                        ->where('id_produk', $idProdukFilter)
+                        ->get();
+        
+        $dataFiltered = $getDataFiltered->mapWithKeys(function ($item, $key) {
+            return [$item->tanggal => $item->jumlah];
+        });
+
+        // dd($dataFiltered);
+
+        return view('pages.dt_prdkantin', [
+            'totals' => $dataRingkasan,
+            'ranks' => $dataRank,
+            'trens' => $dataFiltered,
+            // 'barangTrens' => DB::table('produks')->where('id', $idProdukFilter)->get(),
+        ]);
     }
 
     public function manageData()
