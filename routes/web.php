@@ -45,3 +45,7 @@ Route::get('/sembako/data/preview', function () {
 Route::get('penjualan/kantin', [PenjualanController::class, 'index']);
 Route::get('penjualan/kantin/data', [PenjualanController::class, 'manageData']);
 Route::post('penjualan/kantin/data', [PenjualanController::class, 'importJualKantin']);
+
+Route::get('/login', function () {
+    return view('auth.login');
+});
