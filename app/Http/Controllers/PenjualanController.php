@@ -37,24 +37,40 @@ class PenjualanController extends Controller
         $dataRank = $getDataRank->mapWithKeys(function ($item, $key) {
             return [$item->id_produk => $item->jumlah];
         });
+        // dd($dataRank);  
 
         // -- chart filter
-        $idProdukFilter = 90;
+        $idProductFilter = 22;
         $getDataFiltered = DB::table('penjualans')->select(DB::raw('jumlah, tanggal'))
-                        ->where('id_produk', $idProdukFilter)
+                        ->where('id_produk', $idProductFilter)
                         ->get();
         
         $dataFiltered = $getDataFiltered->mapWithKeys(function ($item, $key) {
             return [$item->tanggal => $item->jumlah];
         });
 
-        // dd($dataFiltered);
+        $productName = DB::table('produks')->where('id', $idProductFilter)->value('nama');
+        
+        $idProductFilter2 = 102;
+        $getDataFiltered2 = DB::table('penjualans')->select(DB::raw('jumlah, tanggal'))
+                        ->where('id_produk', $idProductFilter2)
+                        ->get();
+        
+        $dataFiltered2 = $getDataFiltered2->mapWithKeys(function ($item, $key) {
+            return [$item->tanggal => $item->jumlah];
+        });
+
+        $productName2 = DB::table('produks')->where('id', $idProductFilter2)->value('nama');
+
+        // dd($dataFiltered2);
 
         return view('pages.dt_prdkantin', [
             'totals' => $dataRingkasan,
             'ranks' => $dataRank,
-            'trens' => $dataFiltered,
-            // 'barangTrens' => DB::table('produks')->where('id', $idProdukFilter)->get(),
+            'trends' => $dataFiltered,
+            'trends2' => $dataFiltered2,
+            'barangTrend' => $productName,
+            'barangTrend2' => $productName2,
         ]);
     }
 

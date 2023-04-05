@@ -1,3 +1,4 @@
+{{-- @dd($ranks) --}}
 @extends('main')
 
 @section('content')
@@ -7,18 +8,6 @@
   </div>
 
   <span class="inline-block bg-blue-100 text-blue-800 font-medium mb-3 px-2.5 py-1 rounded-full dark:bg-blue-900 dark:text-blue-300">Grafik Ringkasan</span>
-  {{-- <table class="text-white">
-    <tr>
-      <th>tgl</th>
-      <th>total penjualan</th>
-    </tr>
-    @foreach ($totals as $total)
-      <tr>
-        <td class="px-3 py-1">{{ $total->tanggal }}</td>
-        <td class="px-3 py-1">{{ $total->total_penjualan }}</td>
-      </tr>
-    @endforeach
-  </table> --}}
   <div class="flex gap-4">
     <div class="basis-2/3 h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
       <p class="font-semibold text-gray-800 dark:text-gray-200">Nominal Penjualan Kantin 6 Bulan Terakhir</p>
@@ -33,8 +22,7 @@
   <span class="inline-block bg-blue-100 text-blue-800 font-medium mt-4 mb-3 px-2.5 py-1 rounded-full dark:bg-blue-900 dark:text-blue-300">Grafik Berdasarkan Filter</span>
   <div class="flex gap-4">
     <div class="basis-2/3 h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
-      {{-- @dd($barangTrens) --}}
-      <p class="font-semibold text-gray-800 dark:text-gray-200">Jumlah Penjualan xxx 1 Oktober 2022 - 15 November 2022</p>
+      <p class="font-semibold text-gray-800 dark:text-gray-200">Tren Jumlah Penjualan {{ $barangTrend }} & {{ $barangTrend2 }} Tgl xxx</p>
       <canvas id="filteredChart"></canvas>
     </div>
     <div class="basis-1/3 h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
@@ -141,9 +129,14 @@
       }
     });
 
-    let trens = @json($trens);
-    let labels3 = Object.keys(trens);
-    let data3 = Object.values(trens);
+    let trends = @json($trends);
+    let labels3 = Object.keys(trends);
+    let data3 = Object.values(trends);
+    let trendsProduct = @json($barangTrend);
+    
+    let trends2 = @json($trends2);
+    let data4 = Object.values(trends2);
+    let trendsProduct2 = @json($barangTrend2);
 
     const crt3 = document.getElementById('filteredChart');
 
@@ -151,11 +144,18 @@
       type: 'line',
       data: {
         labels: labels3,
-        datasets: [{
-          label: 'Jumlah Item Terjual',
+        datasets: [
+          {
+          label: trendsProduct,
           data: data3,
           borderWidth: 1
-        }]
+          },
+          {
+          label: trendsProduct2,
+          data: data4,
+          borderWidth: 1
+          },
+        ]
       },
       options: {
         scales: {
