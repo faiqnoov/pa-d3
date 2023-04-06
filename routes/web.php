@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BelanjaController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProdukController;
@@ -30,17 +31,13 @@ Route::post('/produk/prdkantin', [ProdukController::class, 'importMstPrdKantin']
 
 Route::get('/kategori', [KategoriController::class, 'index']);
 
-Route::get('/sembako', function () {
-    return view('pages.dt_sembako');
-});
+// Route::get('/sembako/data/preview', function () {
+//     return view('pages.dt_sembako_data_prev');
+// });
 
-Route::get('/sembako/data', function () {
-    return view('pages.dt_sembako_data');
-});
-
-Route::get('/sembako/data/preview', function () {
-    return view('pages.dt_sembako_data_prev');
-});
+Route::get('belanja/sembako', [BelanjaController::class, 'index']);
+Route::get('belanja/sembako/data', [BelanjaController::class, 'manageData']);
+Route::post('belanja/sembako/data', [BelanjaController::class, 'importBelanjaSembako']); 
 
 Route::get('penjualan/kantin', [PenjualanController::class, 'index']);
 Route::get('penjualan/kantin/data', [PenjualanController::class, 'manageData']);
