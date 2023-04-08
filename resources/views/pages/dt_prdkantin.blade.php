@@ -22,44 +22,46 @@
   <span class="inline-block bg-blue-100 text-blue-800 font-medium mt-4 mb-3 px-2.5 py-1 rounded-full dark:bg-blue-900 dark:text-blue-300">Grafik Berdasarkan Filter</span>
   <div class="flex gap-4">
     <div class="basis-2/3 h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
-      <p class="font-semibold text-gray-800 dark:text-gray-200">Tren Jumlah Penjualan {{ $barangTrend }} & {{ $barangTrend2 }} Tgl xxx</p>
+      <p class="font-semibold text-gray-800 dark:text-gray-200">Jumlah Penjualan {{ $barangTrend }} & {{ $barangTrend2 }} Tgl xxx</p>
       <canvas id="filteredChart"></canvas>
     </div>
     <div class="basis-1/3 h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
       <p class="font-semibold text-center text-gray-800 dark:text-gray-200">Filter Data</p>
-      <div>
+      <form action="" method="">
         <div>
-          <label for="barang1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pilih Barang 1</label>
-          <select id="barang1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-            <option>-</option>
-            <option>Air Mineral</option>
-            <option>Nasi</option>
-            <option>Sayur</option>
-          </select>
-        </div>
-        <div>
-          <label for="barang2" class="block mt-3 mb-2 text-sm font-medium text-gray-900 dark:text-white">Pilih Barang 2</label>
-          <select id="barang2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-            <option>-</option>
-          </select>
-        </div>
-        <div>
-          <label for="tgl-mulai" class="block mt-3 mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Mulai</label>
-          <input type="date" id="tgl-mulai" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-        </div>
-        <div>
-          <label for="tgl-selesai" class="block mt-3 mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Selesai</label>
-          <input type="date" id="tgl-selesai" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-        </div>
-        <div>
-          <p class="mt-3 mb-2 text-sm font-medium text-gray-900 dark:text-white">Filter Berdasarkan</p>
-          <div class="flex items-center">
-            <input id="country-option-1" type="radio" name="countries" value="USA" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600" checked>
-            <label for="country-option-1" class="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Jumlah Penjualan</label>
+          <div>
+            <label for="barang1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pilih Barang 1</label>
+            <select id="barang1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+              <option>-</option>
+              <option>Air Mineral</option>
+              <option>Nasi</option>
+              <option>Sayur</option>
+            </select>
           </div>
+          <div>
+            <label for="barang2" class="block mt-3 mb-2 text-sm font-medium text-gray-900 dark:text-white">Pilih Barang 2</label>
+            <select id="barang2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+              <option>-</option>
+            </select>
+          </div>
+          <div>
+            <label for="tgl-mulai" class="block mt-3 mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Mulai</label>
+            <input type="date" id="tgl-mulai" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+          </div>
+          <div>
+            <label for="tgl-selesai" class="block mt-3 mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Selesai</label>
+            <input type="date" id="tgl-selesai" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+          </div>
+          <div>
+            <p class="mt-3 mb-2 text-sm font-medium text-gray-900 dark:text-white">Filter Berdasarkan</p>
+            <div class="flex items-center">
+              <input id="country-option-1" type="radio" name="countries" value="USA" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600" checked>
+              <label for="country-option-1" class="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Jumlah Penjualan</label>
+            </div>
+          </div>
+          <button type="button" class="block px-3 py-2 mt-3 mx-auto text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Terapkan</button>
         </div>
-        <button type="button" class="block px-3 py-2 mt-3 mx-auto text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Terapkan</button>
-      </div>
+      </form>
     </div>
   </div>
 @endsection

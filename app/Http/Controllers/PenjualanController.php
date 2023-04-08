@@ -28,14 +28,16 @@ class PenjualanController extends Controller
         });
 
         // -- chart ranking
-        // pake join buat ambil nama produk(?)
-        $getDataRank = DB::table('penjualans')->select(DB::raw('id_produk, jumlah'))
+        // yg diambil masih data terakhir aja
+        $getDataRank = DB::table('penjualans')
+                    ->join('produks', 'penjualans.id_produk', '=', 'produks.id')
+                    ->select('penjualans.jumlah', 'produks.nama')
                     ->orderBy('jumlah', 'desc')
                     ->limit(5)
                     ->get();
 
         $dataRank = $getDataRank->mapWithKeys(function ($item, $key) {
-            return [$item->id_produk => $item->jumlah];
+            return [$item->nama => $item->jumlah];
         });
         // dd($dataRank);  
 
