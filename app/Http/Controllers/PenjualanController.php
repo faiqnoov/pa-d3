@@ -28,7 +28,7 @@ class PenjualanController extends Controller
         });
 
         // -- chart ranking
-        // yg diambil masih data terakhir aja
+        // yg diambil hanya data pertama dari tiap penjualan produk
         $getDataRank = DB::table('penjualans')
                     ->join('produks', 'penjualans.id_produk', '=', 'produks.id')
                     ->select('penjualans.jumlah', 'produks.nama')

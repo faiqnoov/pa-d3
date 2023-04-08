@@ -10,12 +10,81 @@
       <p class="ml-1">Ringkasan pemasukan dan pengeluaran setiap jenis data</p>
     </div>
   </div>
+
   <div class="grid grid-cols-2 gap-4">
-    <div class="flex items-center justify-center rounded-lg bg-white h-28 dark:bg-gray-800">
-      <p class="text-2xl text-gray-400 dark:text-gray-500">+</p>
+    <a href="/belanja/sembako" class="block h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
+      <p class="font-semibold text-gray-800 dark:text-gray-200">Belanja Sembako</p>
+      <canvas id="sembakoChart"></canvas>
+    </a>
+    
+    <div class="h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
+      <p class="font-semibold text-gray-800 dark:text-gray-200">Belanja Bahan Masakan</p>
+      <canvas id="bahanmskChart"></canvas>
     </div>
-    <div class="flex items-center justify-center rounded-lg bg-white h-28 dark:bg-gray-800">
-      <p class="text-2xl text-gray-400 dark:text-gray-500">+</p>
+    
+    <div class="h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
+      <p class="font-semibold text-gray-800 dark:text-gray-200">Penjualan Produk Kantin</p>
+      <canvas id="kantinChart"></canvas>
     </div>
   </div>
+
+@endsection
+
+@section('js')
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    // chart penjualan kantin
+    let dataKantin = @json($dataKantin);
+    let labels1 = Object.keys(dataKantin);
+    let data1 = Object.values(dataKantin);
+
+    const crt1 = document.getElementById('kantinChart');
+
+    new Chart(crt1, {
+      type: 'line',
+      data: {
+        labels: labels1,
+        datasets: [{
+          label: 'Nominal Penjualan',
+          data: data1,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: false
+          }
+        }
+      }
+    });
+
+    // chart belanja sembako
+    let dataSembako = @json($dataSembako);
+    let labels2 = Object.keys(dataSembako);
+    let data2 = Object.values(dataSembako);
+
+    const crt2 = document.getElementById('sembakoChart');
+
+    new Chart(crt2, {
+      type: 'line',
+      data: {
+        labels: labels2,
+        datasets: [{
+          label: 'Nominal Belanja',
+          data: data2,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: false
+          }
+        }
+      }
+    });
+
+  </script> 
 @endsection
