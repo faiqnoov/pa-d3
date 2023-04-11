@@ -23,7 +23,8 @@ class TrxBelanjaSembakoImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         $matchProductId = Produk::where('nama', $row['nama_barang'])->get('id');
-
+        // perlu dicari id subkategori dari nama barang, rawan nyangkut ke nama produk yang sama
+        
         if(!$matchProductId->isEmpty()) {
             return new Belanja([
                 'id_produk' => $matchProductId[0]->id,

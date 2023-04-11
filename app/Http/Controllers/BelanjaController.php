@@ -97,6 +97,47 @@ class BelanjaController extends Controller
 
         Excel::import(new TrxBelanjaSembakoImport($date), $file);
 
-        return redirect('/belanja/sembako/data')->with('success', 'Data berhasil diimport');
+        return redirect('/belanja/sembako/prev');
+    }
+
+    public function previewImport()
+    {
+        $lastDate = DB::table('belanjas')->orderBy('tanggal', 'desc')->limit(1)->value('created_at');
+        $justImported = Belanja::where('created_at', $lastDate)->get();
+
+        return view('pages.dt_sembako_data_prev', [
+            'datas' => $justImported,
+            'jmlData' => $justImported->count(),
+            'tglData' => $justImported->last()->tanggal,
+        ]);
+    }
+
+    public function previewImpEdit($id)
+    // public function previewImpEdit(Belanja $belanja)
+    {
+        return view('pages.dt_sembako_data_prev_e', [
+            'belanja' => Belanja::find($id),
+            // 'belanja' => $belanja,
+        ]);
+    }
+
+    public function previewImpUpdate(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            // 'nama' => 'required|max:255',
+            'jumlah' => 'required',
+            'harga_satuan' => 'required',
+        ]);
+
+        Belanja::where('id', $id)->update($validatedData);
+
+        return redirect('/belanja/sembako/prev')->with('success', 'Data berhasil diubah!');
+    }
+
+    public function previewImpDelete($id)
+    {
+        Belanja::destroy($id);
+
+        return redirect('/belanja/sembako/prev')->with('success', 'Data berhasil dihapus!');
     }
 }

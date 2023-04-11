@@ -30,13 +30,13 @@ Route::post('/produk/prdkantin', [ProdukController::class, 'importMstPrdKantin']
 
 Route::get('/kategori', [KategoriController::class, 'index']);
 
-// Route::get('/sembako/data/preview', function () {
-//     return view('pages.dt_sembako_data_prev');
-// });
-
 Route::get('belanja/sembako', [BelanjaController::class, 'index']);
 Route::get('belanja/sembako/data', [BelanjaController::class, 'manageData']);
 Route::post('belanja/sembako/data', [BelanjaController::class, 'importBelanjaSembako']); 
+Route::get('belanja/sembako/prev', [BelanjaController::class, 'previewImport']);
+Route::get('belanja/sembako/{sembako}', [BelanjaController::class, 'previewImpEdit']); 
+Route::post('belanja/sembako/{sembako}', [BelanjaController::class, 'previewImpUpdate']);
+Route::delete('belanja/sembako/{sembako}', [BelanjaController::class, 'previewImpDelete']);
 
 Route::get('penjualan/kantin', [PenjualanController::class, 'index']);
 Route::get('penjualan/kantin/data', [PenjualanController::class, 'manageData']);
