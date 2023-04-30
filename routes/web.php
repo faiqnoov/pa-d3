@@ -41,3 +41,8 @@ Route::delete('belanja/sembako/{sembako}', [BelanjaController::class, 'previewIm
 Route::get('penjualan/kantin', [PenjualanController::class, 'index']);
 Route::get('penjualan/kantin/data', [PenjualanController::class, 'manageData']);
 Route::post('penjualan/kantin/data', [PenjualanController::class, 'importJualKantin']);
+Route::get('penjualan/kantin/prev', [PenjualanController::class, 'previewImport']);
+Route::get('penjualan/kantin/{prdkantin}', [PenjualanController::class, 'previewImpEdit']); 
+Route::post('penjualan/kantin/{prdkantin}', [PenjualanController::class, 'previewImpUpdate']);
+Route::delete('penjualan/kantin/{prdkantin}', [PenjualanController::class, 'previewImpDelete']);
+

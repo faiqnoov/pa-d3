@@ -3,7 +3,7 @@
 @section('content')
   <div class="flex items-center justify-between mb-5">
     <h1 class="text-xl md:text-3xl text-gray-900 dark:text-white">Data Master Kategori</h1>
-    <a href="/upload" class="cursor-pointer rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700">Tambah Kategori</a>
+    {{-- <a href="/upload" class="cursor-pointer rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700">Tambah Kategori</a> --}}
   </div>
 
   <div class="flex gap-4 text-gray-700 dark:text-gray-100">

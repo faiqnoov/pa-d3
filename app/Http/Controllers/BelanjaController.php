@@ -25,13 +25,13 @@ class BelanjaController extends Controller
 
         // -- chart ranking
         // akumulasi semua data
+        // tapi satuannya beda2 cuyy
         $getDataRank = DB::table('belanjas')
                     ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
                     ->select(DB::raw('SUM(belanjas.jumlah) as tot_jumlah, produks.nama'))
-                    ->select(DB::raw('SUM(belanjas.jumlah) as tot_jumlah, produks.nama'))
                     ->groupBy('belanjas.id_produk')
-                    ->orderBy('jumlah', 'desc')
-                    // ->limit(5)
+                    ->orderBy('tot_jumlah', 'desc')
+                    ->limit(5)
                     ->get();
 
         $dataRank = $getDataRank->mapWithKeys(function ($item, $key) {
@@ -43,6 +43,7 @@ class BelanjaController extends Controller
         $idProductFilter = 649;
         $getDataFiltered = DB::table('belanjas')->select(DB::raw('jumlah, tanggal'))
                         ->where('id_produk', $idProductFilter)
+                        ->orderBy('tanggal')
                         ->get();
         
         $dataFiltered = $getDataFiltered->mapWithKeys(function ($item, $key) {
@@ -54,6 +55,7 @@ class BelanjaController extends Controller
         $idProductFilter2 = 651;
         $getDataFiltered2 = DB::table('belanjas')->select(DB::raw('jumlah, tanggal'))
                         ->where('id_produk', $idProductFilter2)
+                        ->orderBy('tanggal')
                         ->get();
         
         $dataFiltered2 = $getDataFiltered2->mapWithKeys(function ($item, $key) {
@@ -102,8 +104,8 @@ class BelanjaController extends Controller
 
     public function previewImport()
     {
-        $lastDate = DB::table('belanjas')->orderBy('tanggal', 'desc')->limit(1)->value('created_at');
-        $justImported = Belanja::where('created_at', $lastDate)->get();
+        $lastDate = DB::table('belanjas')->orderBy('tanggal', 'desc')->limit(1)->value('tanggal');
+        $justImported = Belanja::where('tanggal', $lastDate)->get();
 
         return view('pages.dt_sembako_data_prev', [
             'datas' => $justImported,

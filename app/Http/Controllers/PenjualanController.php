@@ -45,6 +45,7 @@ class PenjualanController extends Controller
         $idProductFilter = 22;
         $getDataFiltered = DB::table('penjualans')->select(DB::raw('jumlah, tanggal'))
                         ->where('id_produk', $idProductFilter)
+                        ->orderBy('tanggal')
                         ->get();
         
         $dataFiltered = $getDataFiltered->mapWithKeys(function ($item, $key) {
@@ -56,6 +57,7 @@ class PenjualanController extends Controller
         $idProductFilter2 = 102;
         $getDataFiltered2 = DB::table('penjualans')->select(DB::raw('jumlah, tanggal'))
                         ->where('id_produk', $idProductFilter2)
+                        ->orderBy('tanggal')
                         ->get();
         
         $dataFiltered2 = $getDataFiltered2->mapWithKeys(function ($item, $key) {
@@ -96,6 +98,43 @@ class PenjualanController extends Controller
         
         Excel::import(new TrxJualKantinImport($date), $file);
 
-        return redirect('/penjualan/kantin/data')->with('success', 'All good!');
+        return redirect('/penjualan/kantin/prev');
+    }
+
+    public function previewImport(){
+        $lastDate = DB::table('penjualans')->orderBy('tanggal', 'desc')->limit(1)->value('tanggal');
+        $justImported = Penjualan::where('tanggal', $lastDate)->get();
+
+        return view('pages.dt_prdkantin_data_prev', [
+            'datas' => $justImported,
+            'jmlData' => $justImported->count(),
+            'tglData' => $justImported->last()->tanggal,
+        ]);
+    }
+
+    public function previewImpEdit($id)
+    {
+        return view('pages.dt_prdkantin_data_prev_e', [
+            'data' => Penjualan::find($id),
+        ]);
+    }
+
+    public function previewImpUpdate(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'jumlah' => 'required',
+            'penjualan_kotor' => 'required',
+        ]);
+
+        Penjualan::where('id', $id)->update($validatedData);
+
+        return redirect('/penjualan/kantin/prev')->with('success', 'Data berhasil diubah!');
+    }
+
+    public function previewImpDelete($id)
+    {
+        Penjualan::destroy($id);
+
+        return redirect('/penjualan/kantin/prev')->with('success', 'Data berhasil dihapus!');
     }
 }
