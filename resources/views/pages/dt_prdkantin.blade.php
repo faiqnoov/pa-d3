@@ -83,7 +83,7 @@
     // how to get total nominal amount from every single date?
 
     new Chart(crt1, {
-      type: 'line',
+      type: 'bar',
       data: {
         labels: labels1,
         datasets: [{
@@ -95,7 +95,7 @@
       options: {
         scales: {
           y: {
-            beginAtZero: false
+            beginAtZero: true
           }
         }
       }
