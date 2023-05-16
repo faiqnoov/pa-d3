@@ -42,9 +42,23 @@ class PenjualanController extends Controller
         // dd($dataRank);  
 
         // -- chart filter
-        $idProductFilter = 22;
+        if(request('tgl-awal') != null) {
+            $tglAwalFilter = request('tgl-awal');
+        } else {
+            $tglAwalFilter = DB::table('penjualans')->min('tanggal');
+        }
+
+        if(request('tgl-akhir') != null) {
+            $tglAkhirFilter = request('tgl-akhir');
+        } else {
+            $tglAkhirFilter = DB::table('penjualans')->max('tanggal');
+        }
+
+        $idProductFilter = request('barang1');
         $getDataFiltered = DB::table('penjualans')->select(DB::raw('jumlah, tanggal'))
                         ->where('id_produk', $idProductFilter)
+                        ->where('tanggal', '>=', $tglAwalFilter)
+                        ->where('tanggal', '<=', $tglAkhirFilter)
                         ->orderBy('tanggal')
                         ->get();
         
@@ -54,9 +68,11 @@ class PenjualanController extends Controller
 
         $productName = DB::table('produks')->where('id', $idProductFilter)->value('nama');
         
-        $idProductFilter2 = 102;
+        $idProductFilter2 = request('barang2');
         $getDataFiltered2 = DB::table('penjualans')->select(DB::raw('jumlah, tanggal'))
                         ->where('id_produk', $idProductFilter2)
+                        ->where('tanggal', '>=', $tglAwalFilter)
+                        ->where('tanggal', '<=', $tglAkhirFilter)
                         ->orderBy('tanggal')
                         ->get();
         
@@ -66,7 +82,16 @@ class PenjualanController extends Controller
 
         $productName2 = DB::table('produks')->where('id', $idProductFilter2)->value('nama');
 
-        // dd($dataFiltered2);
+        // FILTER BOX
+
+        // get produk kantin data and id
+        $produkKantin = DB::table('produks')
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', '!=', 'sembako')
+                    ->where('subkategoris.nama', '!=', 'bahan masakan')
+                    ->select('produks.id', 'produks.nama')
+                    ->get();
+        // dd($produkKantin);
 
         return view('pages.dt_prdkantin', [
             'totals' => $dataRingkasan,
@@ -75,6 +100,10 @@ class PenjualanController extends Controller
             'trends2' => $dataFiltered2,
             'barangTrend' => $productName,
             'barangTrend2' => $productName2,
+
+            'produks' => $produkKantin,
+            'tglAwalFilter' => $tglAwalFilter,
+            'tglAkhirFilter' => $tglAkhirFilter,
         ]);
     }
 

@@ -38,7 +38,9 @@
           Periode {{ $tglAwalFilter }} - {{ $tglAkhirFilter }}
         @endif
       </p>
-      <canvas id="filteredChart"></canvas>
+      @if (request('barang1') || request('barang2'))
+        <canvas id="filteredChart"></canvas>
+      @endif
     </div>
     <div class="basis-1/3 h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
       <p class="font-semibold text-center text-gray-800 dark:text-gray-200">Filter Data</p>

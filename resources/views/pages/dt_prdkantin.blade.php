@@ -22,35 +22,58 @@
   <span class="inline-block bg-blue-100 text-blue-800 font-medium mt-4 mb-3 px-2.5 py-1 rounded-full dark:bg-blue-900 dark:text-blue-300">Grafik Berdasarkan Filter</span>
   <div class="flex gap-4">
     <div class="basis-2/3 h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
-      <p class="font-semibold text-gray-800 dark:text-gray-200">Jumlah Penjualan {{ $barangTrend }} & {{ $barangTrend2 }} Tgl xxx</p>
-      <canvas id="filteredChart"></canvas>
+      <p class="font-semibold text-gray-800 dark:text-gray-200">
+        @if (request('barang1') && request('barang2'))
+          Jumlah Penjualan {{ $barangTrend }} & {{ $barangTrend2 }}
+        @elseif (request('barang1'))
+          Jumlah Penjualan {{ $barangTrend }}
+        @elseif (request('barang2'))
+          Jumlah Penjualan {{ $barangTrend2 }}
+        @else
+          Pilih barang terlebih dahulu!
+        @endif
+
+        @if (request('barang1') || request('barang2'))
+          dari {{ $tglAwalFilter }} sampai {{ $tglAkhirFilter }}
+        @endif
+      </p>
+      @if (request('barang1') || request('barang2'))
+        <canvas id="filteredChart"></canvas>
+      @endif
     </div>
     <div class="basis-1/3 h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
       <p class="font-semibold text-center text-gray-800 dark:text-gray-200">Filter Data</p>
-      <form action="" method="">
+      <form action="/penjualan/kantin">
         <div>
           <div>
             <label for="barang1" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Pilih Barang 1</label>
-            <select id="barang1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-              <option>-</option>
-              <option>Air Mineral</option>
-              <option>Nasi</option>
-              <option>Sayur</option>
+            <select id="barang1" name="barang1" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+              <option value="">-</option>
+              @foreach ($produks as $produk)
+                <option value="{{ $produk->id }}" @if ($produk->id == request('barang1')) selected @endif>
+                  {{ $produk->nama }}
+                </option>
+              @endforeach
             </select>
           </div>
           <div>
             <label for="barang2" class="block mt-3 mb-2 text-sm font-medium text-gray-900 dark:text-white">Pilih Barang 2</label>
-            <select id="barang2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
-              <option>-</option>
+            <select id="barang2" name="barang2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+              <option value="">-</option>
+              @foreach ($produks as $produk)
+                <option value="{{ $produk->id }}" @if ($produk->id == request('barang2')) selected @endif>
+                  {{ $produk->nama }}
+                </option>
+              @endforeach
             </select>
           </div>
           <div>
-            <label for="tgl-mulai" class="block mt-3 mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Mulai</label>
-            <input type="date" id="tgl-mulai" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+            <label for="tgl-awal" class="block mt-3 mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Awal</label>
+            <input type="date" id="tgl-akhir" name="tgl-awal" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" @if(request('tgl-awal')) value="{{ request('tgl-awal') }}" @endif>
           </div>
           <div>
-            <label for="tgl-selesai" class="block mt-3 mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Selesai</label>
-            <input type="date" id="tgl-selesai" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+            <label for="tgl-akhir" class="block mt-3 mb-2 text-sm font-medium text-gray-900 dark:text-white">Tanggal Akhir</label>
+            <input type="date" id="tgl-akhir" name="tgl-akhir" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-sm dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" @if(request('tgl-akhir')) value="{{ request('tgl-akhir') }}" @endif>
           </div>
           <div>
             <p class="mt-3 mb-2 text-sm font-medium text-gray-900 dark:text-white">Filter Berdasarkan</p>
@@ -59,7 +82,7 @@
               <label for="country-option-1" class="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Jumlah Penjualan</label>
             </div>
           </div>
-          <button type="button" class="block px-3 py-2 mt-3 mx-auto text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Terapkan</button>
+          <button type="submit" class="block px-3 py-2 mt-3 mx-auto text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Terapkan</button>
         </div>
       </form>
     </div>
