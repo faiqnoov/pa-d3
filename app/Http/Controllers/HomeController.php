@@ -18,11 +18,23 @@ class HomeController extends Controller
                     ->limit(2)
                     ->get();
 
-        $penjualanBulanIni = $nominalPenjualan[0]->total_penjualan;
-        $penjualanBulanLalu = $nominalPenjualan[1]->total_penjualan;
+        if(count($nominalPenjualan) > 1) {
+            $penjualanBulanIni = $nominalPenjualan[0]->total_penjualan;
+            $penjualanBulanLalu = $nominalPenjualan[1]->total_penjualan;
+        } elseif(count($nominalPenjualan) == 1) {
+            $penjualanBulanIni = $nominalPenjualan[0]->total_penjualan;
+            $penjualanBulanLalu = 0;
+        } else {
+            $penjualanBulanIni = 0;
+            $penjualanBulanLalu = 0;
+        }
 
         $selisihPenjualan = $penjualanBulanIni - $penjualanBulanLalu;
-        $persentasePenjualan = round(($selisihPenjualan / $penjualanBulanLalu) * 100);
+        if($penjualanBulanLalu == 0) {
+            $persentasePenjualan = 100;
+        } else {
+            $persentasePenjualan = round(($selisihPenjualan / $penjualanBulanLalu) * 100);
+        }
 
         // --
         $nominalBelanjaSembako = DB::table('belanjas')->select(DB::raw('SUM(harga_satuan*jumlah) AS total_belanja, tanggal'))
@@ -32,12 +44,24 @@ class HomeController extends Controller
                     ->orderBy('tanggal', 'desc')
                     ->limit(2)
                     ->get();
-        
-        $belanjaSembakoBulanIni = $nominalBelanjaSembako[0]->total_belanja;
-        $belanjaSembakoBulanLalu = $nominalBelanjaSembako[1]->total_belanja;
+
+        if(count($nominalBelanjaSembako) > 1) {
+            $belanjaSembakoBulanIni = $nominalBelanjaSembako[0]->total_belanja;
+            $belanjaSembakoBulanLalu = $nominalBelanjaSembako[1]->total_belanja;
+        } elseif(count($nominalBelanjaSembako) == 1) {
+            $belanjaSembakoBulanIni = $nominalBelanjaSembako[0]->total_belanja;
+            $belanjaSembakoBulanLalu = 0;
+        } else {
+            $belanjaSembakoBulanIni = 0;
+            $belanjaSembakoBulanLalu = 0;
+        }
 
         $selisihBelanjaSembako = $belanjaSembakoBulanIni - $belanjaSembakoBulanLalu;
-        $persentaseBelanjaSembako = round(($selisihBelanjaSembako / $belanjaSembakoBulanLalu) * 100);
+        if($belanjaSembakoBulanLalu == 0) {
+            $persentaseBelanjaSembako = 100;
+        } else {
+            $persentaseBelanjaSembako = round(($selisihBelanjaSembako / $belanjaSembakoBulanLalu) * 100);
+        }
 
         // --
         // ga akurat, karena satuan beda2
