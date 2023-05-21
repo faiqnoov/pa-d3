@@ -109,9 +109,16 @@ class BelanjaController extends Controller
 
     public function manageData()
     {
+        $sembakos = DB::table('belanjas')
+                    ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', 'sembako')
+                    ->select('belanjas.*', 'produks.nama', 'produks.satuan')
+                    ->paginate(10);
+
         return view('pages.dt_sembako_data', [
-            'sembakos'=> Belanja::with('produk')->paginate(10),
-            'jmlTransaksi' => Belanja::count(),
+            'sembakos'=> $sembakos,
+            'jmlTransaksi' => $sembakos->total(),
         ]);
     }
 

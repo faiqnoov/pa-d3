@@ -50,9 +50,9 @@
           <tr class="border-t bg-white dark:border-gray-700 dark:bg-gray-800">
             <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium">{{ $loop->iteration }}</th>
             <td class="px-6 py-4">{{ $sembako->tanggal }}</td>
-            <td class="px-6 py-4">{{ $sembako->produk->nama }}</td>
+            <td class="px-6 py-4">{{ $sembako->nama }}</td>
             <td class="px-6 py-4">{{ $sembako->jumlah }}</td>
-            <td class="px-6 py-4">{{ $sembako->produk->satuan }}</td>
+            <td class="px-6 py-4">{{ $sembako->satuan }}</td>
             <td class="px-6 py-4 text-right">{{ $sembako->harga_satuan }}</td>
             <td class="px-6 py-4 text-right">{{ number_format($sembako->harga_satuan * $sembako->jumlah) }}</td>
             <td class="px-6 py-4">Edit</td>

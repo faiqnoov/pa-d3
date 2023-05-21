@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BelanjaBahanController;
 use App\Http\Controllers\BelanjaController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KategoriController;
@@ -26,6 +27,7 @@ Route::get('/upload', function () {
 
 Route::get('/produk', [ProdukController::class, 'index']);
 Route::post('/produk/sembako', [ProdukController::class, 'importMstSembako']);
+Route::post('/produk/bahan', [ProdukController::class, 'importMstBahan']);
 Route::post('/produk/prdkantin', [ProdukController::class, 'importMstPrdKantin']);
 
 Route::get('/kategori', [KategoriController::class, 'index']);
@@ -37,6 +39,14 @@ Route::get('belanja/sembako/prev', [BelanjaController::class, 'previewImport']);
 Route::get('belanja/sembako/{sembako}', [BelanjaController::class, 'previewImpEdit']); 
 Route::post('belanja/sembako/{sembako}', [BelanjaController::class, 'previewImpUpdate']);
 Route::delete('belanja/sembako/{sembako}', [BelanjaController::class, 'previewImpDelete']);
+
+Route::get('belanja/bahan', [BelanjaBahanController::class, 'index']);
+Route::get('belanja/bahan/data', [BelanjaBahanController::class, 'manageData']);
+Route::post('belanja/bahan/data', [BelanjaBahanController::class, 'importBelanjaSembako']); 
+// Route::get('belanja/bahan/prev', [BelanjaBahanController::class, 'previewImport']);
+// Route::get('belanja/bahan/{sembako}', [BelanjaBahanController::class, 'previewImpEdit']); 
+// Route::post('belanja/bahan/{sembako}', [BelanjaBahanController::class, 'previewImpUpdate']);
+// Route::delete('belanja/bahan/{sembako}', [BelanjaBahanController::class, 'previewImpDelete']);
 
 Route::get('penjualan/kantin', [PenjualanController::class, 'index']);
 Route::get('penjualan/kantin/data', [PenjualanController::class, 'manageData']);

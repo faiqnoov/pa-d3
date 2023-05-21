@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\MstPrdKantinImport;
-use App\Imports\MstSembakoImport;
 use App\Models\Produk;
 use Illuminate\Http\Request;
+use App\Imports\MstBahanImport;
+use App\Imports\MstSembakoImport;
+use App\Imports\MstPrdKantinImport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ProdukController extends Controller
@@ -24,7 +25,16 @@ class ProdukController extends Controller
 
         Excel::import(new MstSembakoImport, $file);
         
-        return redirect('/produk')->with('success', 'Data produk berhasil diperbarui!');
+        return redirect('/produk')->with('success', 'Data produk (Sembako) berhasil diperbarui!');
+    }
+
+    public function importMstBahan(Request $request) 
+    {
+        $file = $request->file('bahan_masak');
+
+        Excel::import(new MstBahanImport, $file);
+        
+        return redirect('/produk')->with('success', 'Data produk (Bahan Masakan) berhasil diperbarui!');
     }
 
     public function importMstPrdKantin(Request $request) 
@@ -33,6 +43,6 @@ class ProdukController extends Controller
 
         Excel::import(new MstPrdKantinImport, $file);
         
-        return redirect('/produk')->with('success', 'Data produk berhasil diperbarui!');
+        return redirect('/produk')->with('success', 'Data produk (Produk Kantin) berhasil diperbarui!');
     }
 }
