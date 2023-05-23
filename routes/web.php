@@ -42,11 +42,11 @@ Route::delete('belanja/sembako/{sembako}', [BelanjaController::class, 'previewIm
 
 Route::get('belanja/bahan', [BelanjaBahanController::class, 'index']);
 Route::get('belanja/bahan/data', [BelanjaBahanController::class, 'manageData']);
-Route::post('belanja/bahan/data', [BelanjaBahanController::class, 'importBelanjaSembako']); 
-// Route::get('belanja/bahan/prev', [BelanjaBahanController::class, 'previewImport']);
-// Route::get('belanja/bahan/{sembako}', [BelanjaBahanController::class, 'previewImpEdit']); 
-// Route::post('belanja/bahan/{sembako}', [BelanjaBahanController::class, 'previewImpUpdate']);
-// Route::delete('belanja/bahan/{sembako}', [BelanjaBahanController::class, 'previewImpDelete']);
+Route::post('belanja/bahan/data', [BelanjaBahanController::class, 'importBelanjaBahan']); 
+Route::get('belanja/bahan/prev', [BelanjaBahanController::class, 'previewImport']);
+Route::get('belanja/bahan/{bahan}', [BelanjaBahanController::class, 'previewImpEdit']); 
+Route::post('belanja/bahan/{bahan}', [BelanjaBahanController::class, 'previewImpUpdate']);
+Route::delete('belanja/bahan/{bahan}', [BelanjaBahanController::class, 'previewImpDelete']);
 
 Route::get('penjualan/kantin', [PenjualanController::class, 'index']);
 Route::get('penjualan/kantin/data', [PenjualanController::class, 'manageData']);
