@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Imports\TrxBelanjaSembakoImport;
 use App\Models\Belanja;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\TrxBelanjaSembakoImport;
 
 class BelanjaController extends Controller
 {
     public function index()
     {
         // // -- chart ringkasan
-        $getDataRingkasan = DB::table('belanjas')->select(DB::raw('SUM(harga_satuan*jumlah) AS total_belanja, tanggal'))
+        $getDataRingkasan = DB::table('belanjas')
+                    ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', 'sembako')
+                    ->select(DB::raw('SUM(belanjas.harga_satuan * belanjas.jumlah) AS total_belanja, belanjas.tanggal'))
                     ->groupBy('tanggal')
                     ->orderBy('tanggal')
                     // ->limit(6)
@@ -31,6 +35,8 @@ class BelanjaController extends Controller
         // tapi satuannya beda2 cuyy
         $getDataRank = DB::table('belanjas')
                     ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', 'sembako')
                     ->select(DB::raw('SUM(belanjas.jumlah) as tot_jumlah, produks.nama'))
                     ->groupBy('belanjas.id_produk')
                     ->orderBy('tot_jumlah', 'desc')
@@ -45,15 +51,24 @@ class BelanjaController extends Controller
         if(request('tgl-awal') != null) {
             $tglAwalFilter = request('tgl-awal');
         } else {
-            $tglAwalFilter = DB::table('belanjas')->min('tanggal');
+            $tglAwalFilter = DB::table('belanjas')
+                    ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', 'sembako')
+                    ->min('tanggal');
         }
 
         if(request('tgl-akhir') != null) {
             $tglAkhirFilter = request('tgl-akhir');
         } else {
-            $tglAkhirFilter = DB::table('belanjas')->max('tanggal');
+            $tglAkhirFilter = DB::table('belanjas')
+                    ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', 'sembako')
+                    ->max('tanggal');
         }
 
+        // product 1
         $idProductFilter = request('barang1');
         $getDataFiltered = DB::table('belanjas')->select(DB::raw('jumlah, tanggal'))
                         ->where('id_produk', $idProductFilter)
@@ -67,7 +82,8 @@ class BelanjaController extends Controller
         });
 
         $productName = DB::table('produks')->where('id', $idProductFilter)->value('nama');
-        
+
+        // product 2
         $idProductFilter2 = request('barang2');
         $getDataFiltered2 = DB::table('belanjas')->select(DB::raw('jumlah, tanggal'))
                         ->where('id_produk', $idProductFilter2)
@@ -83,9 +99,8 @@ class BelanjaController extends Controller
         $productName2 = DB::table('produks')->where('id', $idProductFilter2)->value('nama');
 
         // FILTER BOX
-
         // get sembako data name and id
-        $sembako = DB::table('produks')
+        $sembakos = DB::table('produks')
                     ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
                     ->where('subkategoris.nama', 'sembako')
                     ->select('produks.id', 'produks.nama')
@@ -101,7 +116,7 @@ class BelanjaController extends Controller
             'barangTrend' => $productName,
             'barangTrend2' => $productName2,
 
-            'sembakos' => $sembako,
+            'sembakos' => $sembakos,
             'tglAwalFilter' => $tglAwalFilter,
             'tglAkhirFilter' => $tglAkhirFilter,
         ]);
@@ -143,8 +158,21 @@ class BelanjaController extends Controller
 
     public function previewImport()
     {
-        $lastDate = DB::table('belanjas')->orderBy('tanggal', 'desc')->limit(1)->value('tanggal');
-        $justImported = Belanja::where('tanggal', $lastDate)->get();
+        $lastDate = DB::table('belanjas')
+                    ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', 'sembako')
+                    ->orderBy('tanggal', 'desc')
+                    ->limit(1)
+                    ->value('tanggal');
+                    
+        $justImported = DB::table('belanjas')
+                    ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', '=', 'sembako')
+                    ->where('belanjas.tanggal', '=', $lastDate)
+                    ->select('belanjas.*', 'produks.nama', 'produks.satuan')
+                    ->get();
 
         return view('pages.dt_sembako_data_prev', [
             'datas' => $justImported,

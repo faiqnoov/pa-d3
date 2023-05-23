@@ -45,7 +45,7 @@
         @foreach ($datas as $data)
           <tr class="border-t bg-white dark:border-gray-700 dark:bg-gray-800">
             <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">{{ $loop->iteration }}</th>
-            <td class="px-6 py-4">{{ $data->produk->nama }}</td>
+            <td class="px-6 py-4">{{ $data->nama }}</td>
             <td class="px-6 py-4">{{ $data->harga_satuan }}</td>
             <td class="px-6 py-4">{{ $data->jumlah }}</td>
             <td class="px-6 py-4">{{ $data->harga_satuan * $data->jumlah }}</td>
