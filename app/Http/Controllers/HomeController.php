@@ -10,6 +10,7 @@ class HomeController extends Controller
     public function index()
     {
         // -- insight
+        // nominal penjualan kantin
         $nominalPenjualan = DB::table('penjualans')->select(DB::raw('SUM(penjualan_kotor) as total_penjualan, tanggal'))
                     // ->whereMonth('tanggal', date('01'))
                     // ->whereYear('tanggal', date('2023'))
@@ -36,8 +37,12 @@ class HomeController extends Controller
             $persentasePenjualan = round(($selisihPenjualan / $penjualanBulanLalu) * 100);
         }
 
-        // --
-        $nominalBelanjaSembako = DB::table('belanjas')->select(DB::raw('SUM(harga_satuan*jumlah) AS total_belanja, tanggal'))
+        // nominal belanja sembako
+        $nominalBelanjaSembako = DB::table('belanjas')
+                    ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', 'sembako')
+                    ->select(DB::raw('SUM(harga_satuan*jumlah) AS total_belanja, tanggal'))
                     // ->whereMonth('tanggal', date('01'))
                     // ->whereYear('tanggal', date('2023'))
                     ->groupBy('tanggal')
@@ -63,18 +68,58 @@ class HomeController extends Controller
             $persentaseBelanjaSembako = round(($selisihBelanjaSembako / $belanjaSembakoBulanLalu) * 100);
         }
 
-        // --
+        // nominal belanja bahan masakan
+        $nominalBelanjaBahan = DB::table('belanjas')
+                    ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', 'bahan masakan')
+                    ->select(DB::raw('SUM(harga_satuan*jumlah) AS total_belanja, tanggal'))
+                    ->groupBy('tanggal')
+                    ->orderBy('tanggal', 'desc')
+                    ->limit(2)
+                    ->get();
+
+        if(count($nominalBelanjaBahan) > 1) {
+            $belanjaBahanBulanIni = $nominalBelanjaBahan[0]->total_belanja;
+            $belanjaBahanBulanLalu = $nominalBelanjaBahan[1]->total_belanja;
+        } elseif(count($nominalBelanjaBahan) == 1) {
+            $belanjaBahanBulanIni = $nominalBelanjaBahan[0]->total_belanja;
+            $belanjaBahanBulanLalu = 0;
+        } else {
+            $belanjaBahanBulanIni = 0;
+            $belanjaBahanBulanLalu = 0;
+        }
+
+        $selisihBelanjaBahan = $belanjaBahanBulanIni - $belanjaBahanBulanLalu;
+        if($belanjaBahanBulanLalu == 0) {
+            $persentaseBelanjaBahan = 100;
+        } else {
+            $persentaseBelanjaBahan = round(($selisihBelanjaBahan / $belanjaBahanBulanLalu) * 100);
+        }
+
         // ga akurat, karena satuan beda2
         $sembakoTerbanyak = DB::table('belanjas')
                     ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', 'sembako')
                     ->select(DB::raw('belanjas.tanggal, belanjas.jumlah, produks.nama'))
                     ->groupBy('belanjas.id_produk', 'belanjas.tanggal')
                     ->orderBy('jumlah', 'desc')
                     ->limit(1)
                     ->get();
         
-        // 
-        $penjualanKantinTerbanyak = DB::table('penjualans')
+        // ga akurat, karena satuan beda2
+        $bahanTerbanyak = DB::table('belanjas')
+                    ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
+                    ->select(DB::raw('belanjas.tanggal, belanjas.jumlah, produks.nama'))
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', 'bahan masakan')
+                    ->groupBy('belanjas.id_produk', 'belanjas.tanggal')
+                    ->orderBy('jumlah', 'desc')
+                    ->limit(1)
+                    ->get();
+        
+        $produkKantinTerbanyak = DB::table('penjualans')
                     ->join('produks', 'penjualans.id_produk', '=', 'produks.id')
                     ->select(DB::raw('penjualans.tanggal, penjualans.jumlah, produks.nama'))
                     ->groupBy('penjualans.id_produk', 'penjualans.tanggal')
@@ -94,7 +139,11 @@ class HomeController extends Controller
         });
 
         // -- chart belanja sembako
-        $getDataSembako = DB::table('belanjas')->select(DB::raw('SUM(harga_satuan*jumlah) AS total_belanja, tanggal'))
+        $getDataSembako = DB::table('belanjas')
+                    ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', 'sembako')
+                    ->select(DB::raw('SUM(belanjas.harga_satuan * belanjas.jumlah) AS total_belanja, belanjas.tanggal'))
                     ->groupBy('tanggal')
                     ->orderBy('tanggal')
                     ->limit(6)
@@ -104,16 +153,36 @@ class HomeController extends Controller
             return [$item->tanggal => $item->total_belanja];
         });
 
+        // -- chart belanja bahan masakan
+        $getDataBahan = DB::table('belanjas')
+                    ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', 'bahan masakan')
+                    ->select(DB::raw('SUM(belanjas.harga_satuan * belanjas.jumlah) AS total_belanja, belanjas.tanggal'))
+                    ->groupBy('tanggal')
+                    ->orderBy('tanggal')
+                    ->limit(6)
+                    ->get();
+
+        $dataBahan = $getDataBahan->mapWithKeys(function ($item, $key) {
+            return [$item->tanggal => $item->total_belanja];
+        });
+
         return view('pages.home', [
             'penjualanBulanIni' => $penjualanBulanIni,
             'persentasePenjualan' => $persentasePenjualan,
             'belanjaSembakoBulanIni' => $belanjaSembakoBulanIni,
             'persentaseBelanjaSembako' => $persentaseBelanjaSembako,
+            'belanjaBahanBulanIni' => $belanjaBahanBulanIni,
+            'persentaseBelanjaBahan' => $persentaseBelanjaBahan,
+
             'sembakoTerbanyak' => $sembakoTerbanyak[0]->nama,
-            'penjualanKantinTerbanyak' => $penjualanKantinTerbanyak[0]->nama,
+            'bahanTerbanyak' => $bahanTerbanyak[0]->nama,
+            'produkKantinTerbanyak' => $produkKantinTerbanyak[0]->nama,
 
             'dataKantin' => $dataKantin,
             'dataSembako' => $dataSembako,
+            'dataBahan' => $dataBahan,
         ]);
     }
 }

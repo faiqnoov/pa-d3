@@ -29,13 +29,18 @@
     <div class="h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
       <p class="text-gray-800 dark:text-gray-200">Belanja Bahan Masakan</p>
       <div class="flex justify-between">
-        <p class="font-semibold text-xl text-gray-800 dark:text-gray-200">Rp 0</p>
+        <p class="font-semibold text-xl text-gray-800 dark:text-gray-200">Rp {{ number_format($belanjaBahanBulanIni) }}</p>
         <p class="font-semibold text-xl text-green-500 flex items-center">
-          0%
+          @if ($persentaseBelanjaBahan > 0)
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+              <path fill-rule="evenodd" d="M12 20.25a.75.75 0 01-.75-.75V6.31l-5.47 5.47a.75.75 0 01-1.06-1.06l6.75-6.75a.75.75 0 011.06 0l6.75 6.75a.75.75 0 11-1.06 1.06l-5.47-5.47V19.5a.75.75 0 01-.75.75z" clip-rule="evenodd" />
+            </svg>
+          @endif
+          {{ $persentaseBelanjaBahan }}%
         </p>
       </div>
     </div>
-
+    
     <div class="h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
       <p class="text-gray-800 dark:text-gray-200">Penjualan Kantin</p>
       <div class="flex justify-between">
@@ -59,11 +64,11 @@
     </div>
     <div class="h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
       <p class="text-gray-800 dark:text-gray-200">Bahan Masakan Terbanyak</p>
-      <p class="font-semibold text-xl text-gray-800 dark:text-gray-200">-</p>
+      <p class="font-semibold text-xl text-gray-800 dark:text-gray-200">{{ $bahanTerbanyak }}</p>
     </div>
     <div class="h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
       <p class="text-gray-800 dark:text-gray-200">Produk Kantin Terlaris</p>
-      <p class="font-semibold text-xl text-gray-800 dark:text-gray-200">{{ $penjualanKantinTerbanyak }}</p>
+      <p class="font-semibold text-xl text-gray-800 dark:text-gray-200">{{ $produkKantinTerbanyak }}</p>
     </div>
   </div>
 
@@ -82,7 +87,7 @@
     
     <div class="h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
       <p class="font-semibold text-gray-800 dark:text-gray-200">Belanja Bahan Masakan</p>
-      <canvas id="bahanmskChart"></canvas>
+      <canvas id="bahanChart"></canvas>
     </div>
     
     <div class="h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
@@ -137,6 +142,32 @@
         datasets: [{
           label: 'Nominal Belanja',
           data: data2,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: false
+          }
+        }
+      }
+    });
+
+    // chart belanja bahan masakan
+    let dataBahan = @json($dataBahan);
+    let labels3 = Object.keys(dataBahan);
+    let data3 = Object.values(dataBahan);
+
+    const crt3 = document.getElementById('bahanChart');
+
+    new Chart(crt3, {
+      type: 'line',
+      data: {
+        labels: labels3,
+        datasets: [{
+          label: 'Nominal Belanja',
+          data: data3,
           borderWidth: 1
         }]
       },
