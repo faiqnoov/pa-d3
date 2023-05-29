@@ -56,3 +56,7 @@ Route::get('penjualan/kantin/{prdkantin}', [PenjualanController::class, 'preview
 Route::post('penjualan/kantin/{prdkantin}', [PenjualanController::class, 'previewImpUpdate']);
 Route::delete('penjualan/kantin/{prdkantin}', [PenjualanController::class, 'previewImpDelete']);
 
+
+Route::get('/login', function () {
+    return view('auth.login');
+});
