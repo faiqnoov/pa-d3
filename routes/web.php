@@ -38,7 +38,7 @@ Route::get('belanja/sembako', [BelanjaController::class, 'index'])->middleware('
 Route::get('belanja/sembako/data', [BelanjaController::class, 'manageData']);
 Route::post('belanja/sembako/data', [BelanjaController::class, 'importBelanjaSembako']); 
 Route::get('belanja/sembako/prev', [BelanjaController::class, 'previewImport']);
-Route::get('belanja/sembako/{sembako}', [BelanjaController::class, 'previewImpEdit']); 
+Route::get('belanja/sembako/{sembako}', [BelanjaController::class, 'previewImpEdit']);
 Route::post('belanja/sembako/{sembako}', [BelanjaController::class, 'previewImpUpdate']);
 Route::delete('belanja/sembako/{sembako}', [BelanjaController::class, 'previewImpDelete']);
 
@@ -58,6 +58,9 @@ Route::get('penjualan/kantin/{prdkantin}', [PenjualanController::class, 'preview
 Route::post('penjualan/kantin/{prdkantin}', [PenjualanController::class, 'previewImpUpdate']);
 Route::delete('penjualan/kantin/{prdkantin}', [PenjualanController::class, 'previewImpDelete']);
 
+Route::get('/petunjuk', function () {
+    return view('others.petunjuk');
+});
 
 Route::get('/register', [RegisterController::class, 'index'])->middleware('guest');
 Route::post('/register', [RegisterController::class, 'store']);
