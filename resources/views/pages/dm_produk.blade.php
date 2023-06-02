@@ -43,7 +43,7 @@
           <th scope="col" class="px-6 py-3">Merek</th>
           <th scope="col" class="px-6 py-3">Harga Jual</th>
           <th scope="col" class="px-6 py-3">Harga Beli</th>
-          <th scope="col" class="px-6 py-3">Aksi</th>
+          {{-- <th scope="col" class="px-6 py-3">Aksi</th> --}}
         </tr>
       </thead>
       <tbody>
@@ -57,7 +57,7 @@
             <td class="px-6 py-4">{{ $produk->merek }}</td>
             <td class="px-6 py-4">{{ $produk->harga_jual }}</td>
             <td class="px-6 py-4">{{ $produk->harga_beli }}</td>
-            <td class="px-6 py-4">Edit</td>
+            {{-- <td class="px-6 py-4">Edit</td> --}}
           </tr>
         @endforeach
       </tbody>

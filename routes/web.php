@@ -33,6 +33,8 @@ Route::post('/produk/bahan', [ProdukController::class, 'importMstBahan']);
 Route::post('/produk/prdkantin', [ProdukController::class, 'importMstPrdKantin']);
 
 Route::get('/kategori', [KategoriController::class, 'index']);
+Route::get('/kategori/search', [KategoriController::class, 'search']);
+Route::get('/kategori/load', [KategoriController::class, 'load']);
 
 Route::get('belanja/sembako', [BelanjaController::class, 'index'])->middleware('auth');
 Route::get('belanja/sembako/data', [BelanjaController::class, 'manageData']);
