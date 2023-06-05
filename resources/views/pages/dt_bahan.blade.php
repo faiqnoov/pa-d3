@@ -24,12 +24,18 @@
   <div class="flex gap-4">
     <div class="basis-2/3 h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
       <p class="font-semibold text-gray-800 dark:text-gray-200">
+        @if (request('tipe') == 'jumlah')
+          Jumlah Belanja
+        @else
+          Harga Satuan
+        @endif
+
         @if (request('barang1') && request('barang2'))
-          Jumlah Belanja {{ $barangTrend }} & {{ $barangTrend2 }}
+          {{ $barangTrend }} & {{ $barangTrend2 }}
         @elseif (request('barang1'))
-          Jumlah Belanja {{ $barangTrend }}
+          {{ $barangTrend }}
         @elseif (request('barang2'))
-          Jumlah Belanja {{ $barangTrend2 }}
+          {{ $barangTrend2 }}
         @else
           Pilih barang terlebih dahulu!
         @endif
@@ -79,12 +85,12 @@
           <div>
             <p class="mt-3 mb-2 text-sm font-medium text-gray-900 dark:text-white">Filter Berdasarkan</p>
             <div class="flex items-center">
-              <input id="filter-option-1" type="radio" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600" checked>
+              <input id="filter-option-1" type="radio" name="tipe" value="jumlah" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600" @if(request('tipe') == 'jumlah') checked @endif>
               <label for="filter-option-1" class="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Jumlah Beli</label>
             </div>
             <div class="flex items-center">
-              <input id="filter-option-2" type="radio" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600">
-              <label for="filter-option-2" class="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Harga</label>
+              <input id="filter-option-2" type="radio" name="tipe" value="harga_satuan" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600" @if(request('tipe') == 'harga_satuan') checked @endif>
+              <label for="filter-option-2" class="block ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Harga Satuan</label>
             </div>
           </div>
           <button type="submit" class="block px-3 py-2 mt-3 mx-auto text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Terapkan</button>

@@ -68,9 +68,16 @@ class BelanjaBahanController extends Controller
                     ->max('tanggal');
         }
 
+        // default value still doesn't work
+        if(request('tipe') != null) {
+            $tipe = request('tipe');
+        } else {
+            $tipe = 'jumlah';
+        }
+
         // product 1
         $idProductFilter = request('barang1');
-        $getDataFiltered = DB::table('belanjas')->select(DB::raw('jumlah, tanggal'))
+        $getDataFiltered = DB::table('belanjas')->select($tipe, 'tanggal')
                         ->where('id_produk', $idProductFilter)
                         ->where('tanggal', '>=', $tglAwalFilter)
                         ->where('tanggal', '<=', $tglAkhirFilter)
@@ -78,14 +85,17 @@ class BelanjaBahanController extends Controller
                         ->get();
         
         $dataFiltered = $getDataFiltered->mapWithKeys(function ($item, $key) {
-            return [$item->tanggal => $item->jumlah];
+            if(request('tipe') == 'harga_satuan')
+                return [$item->tanggal => $item->harga_satuan];
+            else if(request('tipe') == 'jumlah')
+                return [$item->tanggal => $item->jumlah];
         });
 
         $productName = DB::table('produks')->where('id', $idProductFilter)->value('nama');
 
         // product 2
         $idProductFilter2 = request('barang2');
-        $getDataFiltered2 = DB::table('belanjas')->select(DB::raw('jumlah, tanggal'))
+        $getDataFiltered2 = DB::table('belanjas')->select($tipe, 'tanggal')
                         ->where('id_produk', $idProductFilter2)
                         ->where('tanggal', '>=', $tglAwalFilter)
                         ->where('tanggal', '<=', $tglAkhirFilter)
@@ -93,7 +103,10 @@ class BelanjaBahanController extends Controller
                         ->get();
         
         $dataFiltered2 = $getDataFiltered2->mapWithKeys(function ($item, $key) {
-            return [$item->tanggal => $item->jumlah];
+            if(request('tipe') == 'harga_satuan')
+                return [$item->tanggal => $item->harga_satuan];
+            else if(request('tipe') == 'jumlah')
+                return [$item->tanggal => $item->jumlah];
         });
 
         $productName2 = DB::table('produks')->where('id', $idProductFilter2)->value('nama');
