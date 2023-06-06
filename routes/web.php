@@ -8,6 +8,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -64,8 +65,9 @@ Route::get('/petunjuk', function () {
     return view('others.petunjuk');
 });
 
-Route::get('/register', [RegisterController::class, 'index'])->middleware('guest');
-Route::post('/register', [RegisterController::class, 'store']);
+Route::get('/user', [UserController::class, 'index'])->middleware('auth');
+Route::get('/user/register', [RegisterController::class, 'index'])->middleware('auth');
+Route::post('/user/register', [RegisterController::class, 'store']);
 
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate']);
