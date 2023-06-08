@@ -44,6 +44,8 @@ Route::get('belanja/sembako/prev', [BelanjaController::class, 'previewImport']);
 Route::get('belanja/sembako/{sembako}', [BelanjaController::class, 'previewImpEdit']);
 Route::post('belanja/sembako/{sembako}', [BelanjaController::class, 'previewImpUpdate']);
 Route::delete('belanja/sembako/{sembako}', [BelanjaController::class, 'previewImpDelete']);
+Route::get('export/sembako', [BelanjaController::class, 'getData']);
+Route::get('pdf/sembako', [BelanjaController::class, 'pdfSembako']);
 
 Route::get('belanja/bahan', [BelanjaBahanController::class, 'index'])->middleware('auth');
 Route::get('belanja/bahan/data', [BelanjaBahanController::class, 'manageData']);

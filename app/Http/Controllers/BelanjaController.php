@@ -222,4 +222,55 @@ class BelanjaController extends Controller
 
         return redirect('/belanja/sembako/prev')->with('success', 'Data berhasil dihapus!');
     }
+
+    public function getData()
+    {
+        // // -- chart ringkasan
+        $getDataRingkasan = DB::table('belanjas')
+                    ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', 'sembako')
+                    ->select(DB::raw('SUM(belanjas.harga_satuan * belanjas.jumlah) AS total_belanja, belanjas.tanggal'))
+                    ->groupBy('tanggal')
+                    ->orderBy('tanggal')
+                    // ->limit(6)
+                    ->get();
+
+        $dataRingkasan = $getDataRingkasan->mapWithKeys(function ($item, $key) {
+            return [$item->tanggal => $item->total_belanja];
+        });
+
+        $tglAwalRingkasan = DB::table('belanjas')->min('tanggal');
+        $tglAkhirRingkasan = DB::table('belanjas')->max('tanggal');
+
+        // -- chart ranking
+        // akumulasi semua data
+        // tapi satuannya beda2 cuyy
+        $getDataRank = DB::table('belanjas')
+                    ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', 'sembako')
+                    ->select(DB::raw('SUM(belanjas.jumlah) as tot_jumlah, produks.nama'))
+                    ->groupBy('belanjas.id_produk')
+                    ->orderBy('tot_jumlah', 'desc')
+                    ->limit(5)
+                    ->get();
+        $dataRank = $getDataRank->mapWithKeys(function ($item, $key) {
+            return [$item->nama => $item->tot_jumlah];
+        });
+
+        $data = [
+            'totals' => $dataRingkasan,
+            'tglAwalRingkasan' => $tglAwalRingkasan,
+            'tglAkhirRingkasan' => $tglAkhirRingkasan,
+            'ranks' => $dataRank,
+        ];
+
+        return response()->json($data);
+    }
+
+    public function pdfSembako()
+    {
+        return view('export.dt_sembako_pdf');
+    }
 }
