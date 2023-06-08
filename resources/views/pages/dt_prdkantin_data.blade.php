@@ -29,7 +29,7 @@
           <th scope="col" class="px-6 py-3">Nama Produk</th>
           <th scope="col" class="px-6 py-3">Jumlah Terjual</th>
           <th scope="col" class="px-6 py-3">Penjualan Kotor</th>
-          <th scope="col" class="px-6 py-3">Aksi</th>
+          {{-- <th scope="col" class="px-6 py-3">Aksi</th> --}}
         </tr>
       </thead>
       <tbody>
@@ -41,7 +41,7 @@
             <td class="px-6 py-4">{{ $penjualan->produk->nama }}</td>
             <td class="px-6 py-4">{{ $penjualan->jumlah }}</td>
             <td class="px-6 py-4">{{ number_format($penjualan->penjualan_kotor) }}</td>
-            <td class="px-6 py-4">x</td>
+            {{-- <td class="px-6 py-4">x</td> --}}
           </tr>
         @endforeach
       </tbody>

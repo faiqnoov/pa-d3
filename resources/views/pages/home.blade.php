@@ -15,12 +15,10 @@
       <p class="text-gray-800 dark:text-gray-200">Belanja Sembako</p>
       <div class="flex justify-between">
         <p class="font-semibold text-xl text-gray-800 dark:text-gray-200">Rp {{ number_format($belanjaSembakoBulanIni) }}</p>
-        <p class="font-semibold text-xl text-green-500 flex items-center">
-          @if ($persentaseBelanjaSembako > 0)
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-              <path fill-rule="evenodd" d="M12 20.25a.75.75 0 01-.75-.75V6.31l-5.47 5.47a.75.75 0 01-1.06-1.06l6.75-6.75a.75.75 0 011.06 0l6.75 6.75a.75.75 0 11-1.06 1.06l-5.47-5.47V19.5a.75.75 0 01-.75.75z" clip-rule="evenodd" />
-            </svg>
-          @endif
+        <p class="font-semibold text-xl flex items-center {{ $persentaseBelanjaSembako > 0 ?  'text-green-500' : 'text-red-500' }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 {{ $persentaseBelanjaSembako < 0 ? 'rotate-180' : '' }}">
+            <path fill-rule="evenodd" d="M12 20.25a.75.75 0 01-.75-.75V6.31l-5.47 5.47a.75.75 0 01-1.06-1.06l6.75-6.75a.75.75 0 011.06 0l6.75 6.75a.75.75 0 11-1.06 1.06l-5.47-5.47V19.5a.75.75 0 01-.75.75z" clip-rule="evenodd" />
+          </svg>
           {{ $persentaseBelanjaSembako }}%
         </p>
       </div>
@@ -30,12 +28,10 @@
       <p class="text-gray-800 dark:text-gray-200">Belanja Bahan Masakan</p>
       <div class="flex justify-between">
         <p class="font-semibold text-xl text-gray-800 dark:text-gray-200">Rp {{ number_format($belanjaBahanBulanIni) }}</p>
-        <p class="font-semibold text-xl text-green-500 flex items-center">
-          @if ($persentaseBelanjaBahan > 0)
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-              <path fill-rule="evenodd" d="M12 20.25a.75.75 0 01-.75-.75V6.31l-5.47 5.47a.75.75 0 01-1.06-1.06l6.75-6.75a.75.75 0 011.06 0l6.75 6.75a.75.75 0 11-1.06 1.06l-5.47-5.47V19.5a.75.75 0 01-.75.75z" clip-rule="evenodd" />
-            </svg>
-          @endif
+        <p class="font-semibold text-xl flex items-center {{ $persentaseBelanjaBahan > 0 ?  'text-green-500' : 'text-red-500' }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 {{ $persentaseBelanjaBahan < 0 ? 'rotate-180' : '' }}">
+            <path fill-rule="evenodd" d="M12 20.25a.75.75 0 01-.75-.75V6.31l-5.47 5.47a.75.75 0 01-1.06-1.06l6.75-6.75a.75.75 0 011.06 0l6.75 6.75a.75.75 0 11-1.06 1.06l-5.47-5.47V19.5a.75.75 0 01-.75.75z" clip-rule="evenodd" />
+          </svg>
           {{ $persentaseBelanjaBahan }}%
         </p>
       </div>
@@ -45,12 +41,10 @@
       <p class="text-gray-800 dark:text-gray-200">Penjualan Kantin</p>
       <div class="flex justify-between">
         <p class="font-semibold text-xl text-gray-800 dark:text-gray-200">Rp {{ number_format($penjualanBulanIni) }}</p>
-        <p class="font-semibold text-xl text-green-500 flex items-center">
-          @if ($persentasePenjualan > 0)
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-              <path fill-rule="evenodd" d="M12 20.25a.75.75 0 01-.75-.75V6.31l-5.47 5.47a.75.75 0 01-1.06-1.06l6.75-6.75a.75.75 0 011.06 0l6.75 6.75a.75.75 0 11-1.06 1.06l-5.47-5.47V19.5a.75.75 0 01-.75.75z" clip-rule="evenodd" />
-            </svg>
-          @endif
+        <p class="font-semibold text-xl flex items-center {{ $persentaseBelanjaBahan > 0 ?  'text-green-500' : 'text-red-500' }}">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 {{ $persentasePenjualan < 0 ? 'rotate-180' : '' }}">
+            <path fill-rule="evenodd" d="M12 20.25a.75.75 0 01-.75-.75V6.31l-5.47 5.47a.75.75 0 01-1.06-1.06l6.75-6.75a.75.75 0 011.06 0l6.75 6.75a.75.75 0 11-1.06 1.06l-5.47-5.47V19.5a.75.75 0 01-.75.75z" clip-rule="evenodd" />
+          </svg>
           {{ $persentasePenjualan }}%
         </p>
       </div>
@@ -110,7 +104,7 @@
     const crt1 = document.getElementById('kantinChart');
 
     new Chart(crt1, {
-      type: 'line',
+      type: 'bar',
       data: {
         labels: labels1,
         datasets: [{
@@ -136,7 +130,7 @@
     const crt2 = document.getElementById('sembakoChart');
 
     new Chart(crt2, {
-      type: 'line',
+      type: 'bar',
       data: {
         labels: labels2,
         datasets: [{
@@ -162,7 +156,7 @@
     const crt3 = document.getElementById('bahanChart');
 
     new Chart(crt3, {
-      type: 'line',
+      type: 'bar',
       data: {
         labels: labels3,
         datasets: [{

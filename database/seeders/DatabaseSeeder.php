@@ -4,12 +4,14 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Produk;
 use App\Models\Belanja;
 use App\Models\Kategori;
 use App\Models\Penjualan;
-use App\Models\Produk;
 use App\Models\Subkategori;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,6 +22,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        User::create([
+            'name' => 'Admin KDH',
+            'email' => 'adminkdh@pens.ac.id',
+            'password' => Hash::make('qwe123'),
+        ]);
+
         Kategori::create([
             'nama' => 'Makanan',
         ]);

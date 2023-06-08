@@ -48,4 +48,12 @@
       </form>
     </div>
   </div>
+
+  <div class="w-full bg-green-100 border-2 border-green-800 rounded-lg shadow mt-5 sm:max-w-md xl:p-0">
+    <div class="px-6 py-3 italic">
+      <p class="underline">Akun demo</p>
+      <p>Email : adminkdh@pens.ac.id</p>
+      <p>Password : qwe123</p>
+    </div>
+  </div>
 @endsection

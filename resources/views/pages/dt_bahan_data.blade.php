@@ -42,7 +42,7 @@
           <th scope="col" class="px-6 py-3">Satuan</th>
           <th scope="col" class="px-6 py-3">Harga Satuan</th>
           <th scope="col" class="px-6 py-3">Harga Total</th>
-          <th scope="col" class="px-6 py-3">Aksi</th>
+          {{-- <th scope="col" class="px-6 py-3">Aksi</th> --}}
         </tr>
       </thead>
       <tbody>
@@ -55,7 +55,7 @@
             <td class="px-6 py-4">{{ $bahan->satuan }}</td>
             <td class="px-6 py-4 text-right">{{ $bahan->harga_satuan }}</td>
             <td class="px-6 py-4 text-right">{{ number_format($bahan->harga_satuan * $bahan->jumlah) }}</td>
-            <td class="px-6 py-4">Edit</td>
+            {{-- <td class="px-6 py-4">Edit</td> --}}
           </tr>
         @endforeach
       </tbody>
