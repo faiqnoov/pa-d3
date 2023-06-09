@@ -12,105 +12,6 @@ class BelanjaController extends Controller
 {
     public function index()
     {
-        // // -- chart ringkasan
-        $getDataRingkasan = DB::table('belanjas')
-                    ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
-                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
-                    ->where('subkategoris.nama', 'sembako')
-                    ->select(DB::raw('SUM(belanjas.harga_satuan * belanjas.jumlah) AS total_belanja, belanjas.tanggal'))
-                    ->groupBy('tanggal')
-                    ->orderBy('tanggal')
-                    // ->limit(6)
-                    ->get();
-
-        $dataRingkasan = $getDataRingkasan->mapWithKeys(function ($item, $key) {
-            return [$item->tanggal => $item->total_belanja];
-        });
-
-        $tglAwalRingkasan = DB::table('belanjas')->min('tanggal');
-        $tglAkhirRingkasan = DB::table('belanjas')->max('tanggal');
-
-        // -- chart ranking
-        // akumulasi semua data
-        // tapi satuannya beda2 cuyy
-        $getDataRank = DB::table('belanjas')
-                    ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
-                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
-                    ->where('subkategoris.nama', 'sembako')
-                    ->select(DB::raw('SUM(belanjas.jumlah) as tot_jumlah, produks.nama'))
-                    ->groupBy('belanjas.id_produk')
-                    ->orderBy('tot_jumlah', 'desc')
-                    ->limit(5)
-                    ->get();
-        $dataRank = $getDataRank->mapWithKeys(function ($item, $key) {
-            return [$item->nama => $item->tot_jumlah];
-        });
-
-        // -- chart filter
-
-        if(request('tgl-awal') != null) {
-            $tglAwalFilter = request('tgl-awal');
-        } else {
-            $tglAwalFilter = DB::table('belanjas')
-                    ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
-                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
-                    ->where('subkategoris.nama', 'sembako')
-                    ->min('tanggal');
-        }
-
-        if(request('tgl-akhir') != null) {
-            $tglAkhirFilter = request('tgl-akhir');
-        } else {
-            $tglAkhirFilter = DB::table('belanjas')
-                    ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
-                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
-                    ->where('subkategoris.nama', 'sembako')
-                    ->max('tanggal');
-        }
-
-        // default value still doesn't work
-        if(request('tipe') != null) {
-            $tipe = request('tipe');
-        } else {
-            $tipe = 'jumlah';
-        }
-
-        // product 1
-        $idProductFilter = request('barang1');
-        $getDataFiltered = DB::table('belanjas')->select($tipe, 'tanggal')
-                        ->where('id_produk', $idProductFilter)
-                        ->where('tanggal', '>=', $tglAwalFilter)
-                        ->where('tanggal', '<=', $tglAkhirFilter)
-                        ->orderBy('tanggal')
-                        ->get();
-        
-        $dataFiltered = $getDataFiltered->mapWithKeys(function ($item, $key) {
-            if(request('tipe') == 'harga_satuan')
-                return [$item->tanggal => $item->harga_satuan];
-            else if(request('tipe') == 'jumlah')
-                return [$item->tanggal => $item->jumlah];
-        });
-
-        $productName = DB::table('produks')->where('id', $idProductFilter)->value('nama');
-
-        // product 2
-        $idProductFilter2 = request('barang2');
-        $getDataFiltered2 = DB::table('belanjas')->select($tipe, 'tanggal')
-                        ->where('id_produk', $idProductFilter2)
-                        ->where('tanggal', '>=', $tglAwalFilter)
-                        ->where('tanggal', '<=', $tglAkhirFilter)
-                        ->orderBy('tanggal')
-                        ->get();
-        
-        $dataFiltered2 = $getDataFiltered2->mapWithKeys(function ($item, $key) {
-            if(request('tipe') == 'harga_satuan')
-                return [$item->tanggal => $item->harga_satuan];
-            else if(request('tipe') == 'jumlah')
-                return [$item->tanggal => $item->jumlah];
-        });
-
-        $productName2 = DB::table('produks')->where('id', $idProductFilter2)->value('nama');
-
         // FILTER BOX
         // get sembako data name and id
         $sembakos = DB::table('produks')
@@ -120,18 +21,7 @@ class BelanjaController extends Controller
                     ->get();
 
         return view('pages.dt_sembako', [
-            'totals' => $dataRingkasan,
-            'tglAwalRingkasan' => $tglAwalRingkasan,
-            'tglAkhirRingkasan' => $tglAkhirRingkasan,
-            'ranks' => $dataRank,
-            'trends' => $dataFiltered,
-            'trends2' => $dataFiltered2,
-            'barangTrend' => $productName,
-            'barangTrend2' => $productName2,
-
             'sembakos' => $sembakos,
-            'tglAwalFilter' => $tglAwalFilter,
-            'tglAkhirFilter' => $tglAkhirFilter,
         ]);
     }
 
@@ -264,6 +154,83 @@ class BelanjaController extends Controller
             'tglAwalRingkasan' => $tglAwalRingkasan,
             'tglAkhirRingkasan' => $tglAkhirRingkasan,
             'ranks' => $dataRank,
+        ];
+
+        return response()->json($data);
+    }
+
+    public function getDataFilter(Request $request)
+    {
+        if(request('tgl-awal') != null) {
+            $tglAwalFilter = request('tgl-awal');
+        } else {
+            $tglAwalFilter = DB::table('belanjas')
+                    ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', 'sembako')
+                    ->min('tanggal');
+        }
+
+        if(request('tgl-akhir') != null) {
+            $tglAkhirFilter = request('tgl-akhir');
+        } else {
+            $tglAkhirFilter = DB::table('belanjas')
+                    ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', 'sembako')
+                    ->max('tanggal');
+        }
+
+        // data type
+        if(request('tipe') != null) {
+            $tipe = request('tipe');
+        } else {
+            $tipe = 'jumlah';
+        }
+
+        // product 1
+        $idProductFilter = request('barang1');
+        $getDataFiltered = DB::table('belanjas')->select($tipe, 'tanggal')
+                        ->where('id_produk', $idProductFilter)
+                        ->where('tanggal', '>=', $tglAwalFilter)
+                        ->where('tanggal', '<=', $tglAkhirFilter)
+                        ->orderBy('tanggal')
+                        ->get();
+        
+        $dataFiltered = $getDataFiltered->mapWithKeys(function ($item, $key) {
+            if(request('tipe') == 'harga_satuan')
+                return [$item->tanggal => $item->harga_satuan];
+            else if(request('tipe') == 'jumlah')
+                return [$item->tanggal => $item->jumlah];
+        });
+
+        $productName = DB::table('produks')->where('id', $idProductFilter)->value('nama');
+
+        // product 2
+        $idProductFilter2 = request('barang2');
+        $getDataFiltered2 = DB::table('belanjas')->select($tipe, 'tanggal')
+                        ->where('id_produk', $idProductFilter2)
+                        ->where('tanggal', '>=', $tglAwalFilter)
+                        ->where('tanggal', '<=', $tglAkhirFilter)
+                        ->orderBy('tanggal')
+                        ->get();
+        
+        $dataFiltered2 = $getDataFiltered2->mapWithKeys(function ($item, $key) {
+            if(request('tipe') == 'harga_satuan')
+                return [$item->tanggal => $item->harga_satuan];
+            else if(request('tipe') == 'jumlah')
+                return [$item->tanggal => $item->jumlah];
+        });
+
+        $productName2 = DB::table('produks')->where('id', $idProductFilter2)->value('nama');
+
+        $data = [
+            'trends' => $dataFiltered,
+            'trends2' => $dataFiltered2,
+            'barangTrend' => $productName,
+            'barangTrend2' => $productName2,
+            'tglAwalFilter' => $tglAwalFilter,
+            'tglAkhirFilter' => $tglAkhirFilter,
         ];
 
         return response()->json($data);

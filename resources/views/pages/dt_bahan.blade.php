@@ -26,7 +26,7 @@
       <p class="font-semibold text-gray-800 dark:text-gray-200">
         @if (request('tipe') == 'jumlah')
           Jumlah Belanja
-        @else
+        @elseif (request('tipe') == 'harga')
           Harga Satuan
         @endif
 
