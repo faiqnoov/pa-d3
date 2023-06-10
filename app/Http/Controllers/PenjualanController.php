@@ -12,10 +12,22 @@ class PenjualanController extends Controller
 {
     public function index()
     {
-        // $cireng = Penjualan::all();
-        // $cireng = DB::table('Penjualans')->get();
-        // $cireng = ['2023-11-30' => 123000000, '2023-12-31' => 99000];
+        // FILTER BOX
+        // get produk kantin data and id
+        $produkKantin = DB::table('produks')
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', '!=', 'sembako')
+                    ->where('subkategoris.nama', '!=', 'bahan masakan')
+                    ->select('produks.id', 'produks.nama')
+                    ->get();
 
+        return view('pages.dt_prdkantin', [
+            'produks' => $produkKantin,
+        ]);
+    }
+
+    public function getData()
+    {
         // -- chart ringkasan
         $getDataRingkasan = DB::table('penjualans')->select(DB::raw('SUM(penjualan_kotor) as total_penjualan, tanggal'))
                     ->groupBy('tanggal')
@@ -26,6 +38,9 @@ class PenjualanController extends Controller
         $dataRingkasan = $getDataRingkasan->mapWithKeys(function ($item, $key) {
             return [$item->tanggal => $item->total_penjualan];
         });
+
+        $tglAwalRingkasan = DB::table('penjualans')->min('tanggal');
+        $tglAkhirRingkasan = DB::table('penjualans')->max('tanggal');
 
         // -- chart ranking
         // yg diambil hanya data pertama dari tiap penjualan produk
@@ -39,8 +54,19 @@ class PenjualanController extends Controller
         $dataRank = $getDataRank->mapWithKeys(function ($item, $key) {
             return [$item->nama => $item->jumlah];
         });
-        // dd($dataRank);  
 
+        $data = [
+            'totals' => $dataRingkasan,
+            'tglAwalRingkasan' => $tglAwalRingkasan,
+            'tglAkhirRingkasan' => $tglAkhirRingkasan,
+            'ranks' => $dataRank,
+        ];
+
+        return response()->json($data);
+    }
+
+    public function getDataFilter()
+    {
         // -- chart filter
         if(request('tgl-awal') != null) {
             $tglAwalFilter = request('tgl-awal');
@@ -82,29 +108,21 @@ class PenjualanController extends Controller
 
         $productName2 = DB::table('produks')->where('id', $idProductFilter2)->value('nama');
 
-        // FILTER BOX
-
-        // get produk kantin data and id
-        $produkKantin = DB::table('produks')
-                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
-                    ->where('subkategoris.nama', '!=', 'sembako')
-                    ->where('subkategoris.nama', '!=', 'bahan masakan')
-                    ->select('produks.id', 'produks.nama')
-                    ->get();
-        // dd($produkKantin);
-
-        return view('pages.dt_prdkantin', [
-            'totals' => $dataRingkasan,
-            'ranks' => $dataRank,
+        $data = [
             'trends' => $dataFiltered,
             'trends2' => $dataFiltered2,
             'barangTrend' => $productName,
             'barangTrend2' => $productName2,
-
-            'produks' => $produkKantin,
             'tglAwalFilter' => $tglAwalFilter,
             'tglAkhirFilter' => $tglAkhirFilter,
-        ]);
+        ];
+
+        return response()->json($data);
+    }
+
+    public function pdfKantin()
+    {
+        return view('export.dt_prdkantin_pdf');
     }
 
     public function manageData()

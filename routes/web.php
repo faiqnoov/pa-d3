@@ -37,6 +37,7 @@ Route::get('/kategori', [KategoriController::class, 'index']);
 Route::get('/kategori/search', [KategoriController::class, 'search']);
 Route::get('/kategori/load', [KategoriController::class, 'load']);
 
+// -- belanja sembako --
 Route::get('belanja/sembako', [BelanjaController::class, 'index'])->middleware('auth');
 Route::get('belanja/sembako/data', [BelanjaController::class, 'manageData']);
 Route::post('belanja/sembako/data', [BelanjaController::class, 'importBelanjaSembako']); 
@@ -48,6 +49,7 @@ Route::get('getdata/sembako', [BelanjaController::class, 'getData']);
 Route::get('getdatafilter/sembako', [BelanjaController::class, 'getDataFilter']);
 Route::get('pdf/sembako', [BelanjaController::class, 'pdfSembako']);
 
+// -- belanja bahan --
 Route::get('belanja/bahan', [BelanjaBahanController::class, 'index'])->middleware('auth');
 Route::get('belanja/bahan/data', [BelanjaBahanController::class, 'manageData']);
 Route::post('belanja/bahan/data', [BelanjaBahanController::class, 'importBelanjaBahan']); 
@@ -56,6 +58,7 @@ Route::get('belanja/bahan/{bahan}', [BelanjaBahanController::class, 'previewImpE
 Route::post('belanja/bahan/{bahan}', [BelanjaBahanController::class, 'previewImpUpdate']);
 Route::delete('belanja/bahan/{bahan}', [BelanjaBahanController::class, 'previewImpDelete']);
 
+// -- penjualan produk kantin --
 Route::get('penjualan/kantin', [PenjualanController::class, 'index'])->middleware('auth');
 Route::get('penjualan/kantin/data', [PenjualanController::class, 'manageData']);
 Route::post('penjualan/kantin/data', [PenjualanController::class, 'importJualKantin']);
@@ -63,11 +66,15 @@ Route::get('penjualan/kantin/prev', [PenjualanController::class, 'previewImport'
 Route::get('penjualan/kantin/{prdkantin}', [PenjualanController::class, 'previewImpEdit']); 
 Route::post('penjualan/kantin/{prdkantin}', [PenjualanController::class, 'previewImpUpdate']);
 Route::delete('penjualan/kantin/{prdkantin}', [PenjualanController::class, 'previewImpDelete']);
+Route::get('/kantin/getdata', [PenjualanController::class, 'getData']);
+Route::get('/kantin/getdatafilter', [PenjualanController::class, 'getDataFilter']);
+Route::get('/kantin/pdf', [PenjualanController::class, 'pdfKantin']);
 
 Route::get('/petunjuk', function () {
     return view('others.petunjuk');
 });
 
+// -- auth -- 
 Route::get('/user', [UserController::class, 'index'])->middleware('auth');
 Route::get('/user/register', [RegisterController::class, 'index'])->middleware('auth');
 Route::post('/user/register', [RegisterController::class, 'store']);
