@@ -12,6 +12,21 @@ class BelanjaBahanController extends Controller
 {
     public function index()
     {
+        // FILTER BOX
+        // get bahan data name and id
+        $bahans = DB::table('produks')
+                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
+                    ->where('subkategoris.nama', 'bahan masakan')
+                    ->select('produks.id', 'produks.nama')
+                    ->get();
+
+        return view('pages.dt_bahan', [
+            'bahans' => $bahans,
+        ]);
+    }
+
+    public function getData()
+    {
         // -- chart ringkasan
         $getDataRingkasan = DB::table('belanjas')
                     ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
@@ -46,8 +61,24 @@ class BelanjaBahanController extends Controller
             return [$item->nama => $item->tot_jumlah];
         });
 
-        // -- chart filter
+        $data = [
+            'totals' => $dataRingkasan,
+            'tglAwalRingkasan' => $tglAwalRingkasan,
+            'tglAkhirRingkasan' => $tglAkhirRingkasan,
+            'ranks' => $dataRank,
+        ];
 
+        return response()->json($data);
+    }
+
+    public function pdfBahan()
+    {
+        return view('export.dt_bahan_pdf');
+    }
+
+    public function getDataFilter()
+    {
+        // -- chart filter
         if(request('tgl-awal') != null) {
             $tglAwalFilter = request('tgl-awal');
         } else {
@@ -111,28 +142,16 @@ class BelanjaBahanController extends Controller
 
         $productName2 = DB::table('produks')->where('id', $idProductFilter2)->value('nama');
 
-        // FILTER BOX
-        // get bahan data name and id
-        $bahans = DB::table('produks')
-                    ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
-                    ->where('subkategoris.nama', 'bahan masakan')
-                    ->select('produks.id', 'produks.nama')
-                    ->get();
-
-        return view('pages.dt_bahan', [
-            'totals' => $dataRingkasan,
-            'tglAwalRingkasan' => $tglAwalRingkasan,
-            'tglAkhirRingkasan' => $tglAkhirRingkasan,
-            'ranks' => $dataRank,
+        $data = [
             'trends' => $dataFiltered,
             'trends2' => $dataFiltered2,
             'barangTrend' => $productName,
             'barangTrend2' => $productName2,
-
-            'bahans' => $bahans,
             'tglAwalFilter' => $tglAwalFilter,
             'tglAkhirFilter' => $tglAkhirFilter,
-        ]);
+        ];
+
+        return response()->json($data);
     }
 
     public function manageData()

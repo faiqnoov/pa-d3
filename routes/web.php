@@ -57,6 +57,9 @@ Route::get('belanja/bahan/prev', [BelanjaBahanController::class, 'previewImport'
 Route::get('belanja/bahan/{bahan}', [BelanjaBahanController::class, 'previewImpEdit']); 
 Route::post('belanja/bahan/{bahan}', [BelanjaBahanController::class, 'previewImpUpdate']);
 Route::delete('belanja/bahan/{bahan}', [BelanjaBahanController::class, 'previewImpDelete']);
+Route::get('/bahan/getdata', [BelanjaBahanController::class, 'getData']);
+Route::get('/bahan/getdatafilter', [BelanjaBahanController::class, 'getDataFilter']);
+Route::get('/bahan/pdf', [BelanjaBahanController::class, 'pdfBahan']);
 
 // -- penjualan produk kantin --
 Route::get('penjualan/kantin', [PenjualanController::class, 'index'])->middleware('auth');
