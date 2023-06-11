@@ -129,7 +129,8 @@ class PenjualanController extends Controller
     {
         return view('pages.dt_prdkantin_data', [
             'penjualans' => Penjualan::paginate(30),
-            'jmlTransaksi' => Penjualan::count()
+            'jmlTransaksi' => Penjualan::count(),
+            'lastDataDate' => Penjualan::orderBy('tanggal', 'desc')->limit(1)->value('tanggal'),
         ]);
     }
 

@@ -11,8 +11,8 @@ class KategoriController extends Controller
     public function index()
     {
         return view('pages.dm_kategori', [
-            // 'subkategoris' => Subkategori::all(),
-            'jmlSubkategori' => Subkategori::count()
+            'jmlSubkategori' => Subkategori::count(),
+            'lastDataDate' => Subkategori::latest()->first()->updated_at->format('Y-m-d') ?? 'Belum ada data'
         ]);
     }
     

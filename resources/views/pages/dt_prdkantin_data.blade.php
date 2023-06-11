@@ -15,7 +15,7 @@
     </div>
     <div class="w-64 rounded-lg bg-white py-3 px-4 dark:bg-gray-800">
       <p>Data Terbaru</p>
-      <p class="text-xl md:text-2xl font-medium"> - </p>
+      <p class="text-xl md:text-2xl font-medium">{{ $lastDataDate }}</p>
     </div>
   </div>
 

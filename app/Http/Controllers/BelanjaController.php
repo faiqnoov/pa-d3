@@ -31,12 +31,12 @@ class BelanjaController extends Controller
                     ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
                     ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
                     ->where('subkategoris.nama', 'sembako')
-                    ->select('belanjas.*', 'produks.nama', 'produks.satuan')
-                    ->paginate(10);
+                    ->select('belanjas.*', 'produks.nama', 'produks.satuan');
         
         return view('pages.dt_sembako_data', [
-            'sembakos'=> $sembakos,
-            'jmlTransaksi' => $sembakos->total(),
+            'sembakos'=> $sembakos->paginate(30),
+            'jmlTransaksi' => $sembakos->count(),
+            'lastDataDate' => $sembakos->orderBy('tanggal', 'desc')->first()->tanggal ?? 'Belum ada data', // still bug in pagination
         ]);
     }
 

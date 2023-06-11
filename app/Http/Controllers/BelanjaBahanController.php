@@ -160,12 +160,12 @@ class BelanjaBahanController extends Controller
                 ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
                 ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
                 ->where('subkategoris.nama', '=', 'bahan masakan')
-                ->select('belanjas.*', 'produks.nama', 'produks.satuan')
-                ->paginate(10);
+                ->select('belanjas.*', 'produks.nama', 'produks.satuan');
 
         return view('pages.dt_bahan_data', [
-            'bahans'=> $bahans,
-            'jmlTransaksi' => $bahans->total(),
+            'bahans'=> $bahans->paginate(30),
+            'jmlTransaksi' => $bahans->count(),
+            'lastDataDate' => $bahans->orderBy('tanggal', 'desc')->first()->tanggal ?? 'Belum ada data', // still bug in pagination
         ]);
     }
 

@@ -14,8 +14,9 @@ class ProdukController extends Controller
     public function index()
     {
         return view('pages.dm_produk', [
-            'produks' => Produk::paginate(20),
-            'jmlProduk' => Produk::count()
+            'produks' => Produk::paginate(30),
+            'jmlProduk' => Produk::count(),
+            'lastDataDate' => Produk::latest()->first()->updated_at->format('Y-m-d') ?? 'Belum ada data'
         ]);
     }
 
