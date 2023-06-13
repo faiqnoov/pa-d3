@@ -42,16 +42,17 @@ class BelanjaBahanController extends Controller
             return [$item->tanggal => $item->total_belanja];
         });
 
-        $tglAwalRingkasan = DB::table('belanjas')->min('tanggal');
-        $tglAkhirRingkasan = DB::table('belanjas')->max('tanggal');
+        $tglAwalRingkasan = $getDataRingkasan->first()->tanggal;
+        $tglAkhirRingkasan = $getDataRingkasan->last()->tanggal;
 
         // -- chart ranking
-        // akumulasi semua data
+        // berdasarkan data terakhir
         // tapi satuannya beda2 cuyy
         $getDataRank = DB::table('belanjas')
                     ->join('produks', 'belanjas.id_produk', '=', 'produks.id')
                     ->join('subkategoris', 'produks.id_subkategori', '=', 'subkategoris.id')
                     ->where('subkategoris.nama', 'bahan masakan')
+                    ->where('belanjas.tanggal', '=', $tglAkhirRingkasan)
                     ->select(DB::raw('SUM(belanjas.jumlah) as tot_jumlah, produks.nama'))
                     ->groupBy('belanjas.id_produk')
                     ->orderBy('tot_jumlah', 'desc')

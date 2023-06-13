@@ -43,9 +43,10 @@ class PenjualanController extends Controller
         $tglAkhirRingkasan = DB::table('penjualans')->max('tanggal');
 
         // -- chart ranking
-        // yg diambil hanya data pertama dari tiap penjualan produk
+        // berdasarkan data terakhir
         $getDataRank = DB::table('penjualans')
                     ->join('produks', 'penjualans.id_produk', '=', 'produks.id')
+                    ->where('penjualans.tanggal', '=', $tglAkhirRingkasan)
                     ->select('penjualans.jumlah', 'produks.nama')
                     ->orderBy('jumlah', 'desc')
                     ->limit(5)

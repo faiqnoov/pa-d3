@@ -41,7 +41,7 @@
       <p class="text-gray-800 dark:text-gray-200">Penjualan Kantin</p>
       <div class="flex justify-between">
         <p class="font-semibold text-xl text-gray-800 dark:text-gray-200">Rp {{ number_format($penjualanBulanIni) }}</p>
-        <p class="font-semibold text-xl flex items-center {{ $persentaseBelanjaBahan > 0 ?  'text-green-500' : 'text-red-500' }}">
+        <p class="font-semibold text-xl flex items-center {{ $persentasePenjualan > 0 ?  'text-green-500' : 'text-red-500' }}">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 {{ $persentasePenjualan < 0 ? 'rotate-180' : '' }}">
             <path fill-rule="evenodd" d="M12 20.25a.75.75 0 01-.75-.75V6.31l-5.47 5.47a.75.75 0 01-1.06-1.06l6.75-6.75a.75.75 0 011.06 0l6.75 6.75a.75.75 0 11-1.06 1.06l-5.47-5.47V19.5a.75.75 0 01-.75.75z" clip-rule="evenodd" />
           </svg>
@@ -74,10 +74,10 @@
   </div>
 
   <div class="grid grid-cols-2 gap-4">
-    <a href="/belanja/sembako" class="block h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
+    <div class="h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
       <p class="font-semibold text-gray-800 dark:text-gray-200">Belanja Sembako</p>
       <canvas id="sembakoChart"></canvas>
-    </a>
+    </div>
     
     <div class="h-fit px-4 py-3 rounded-lg bg-white dark:bg-gray-800">
       <p class="font-semibold text-gray-800 dark:text-gray-200">Belanja Bahan Masakan</p>
